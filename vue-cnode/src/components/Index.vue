@@ -28,7 +28,7 @@
               <div class="box" flex="dir:top">
                 <strong>{{ item.author.loginname }}</strong>
                 <div flex>
-                  <time>{{ item.create_at | formatDate }}</time>
+                  <time>{{ item.create_at | formatDate}}</time>
                   <span class="tag">#分享#</span>
                 </div>
               </div>
@@ -43,11 +43,22 @@
             </div>
             <div class="tit">{{ item.title }}</div>
             <div class="expand" flex="box:mean">
-              
+              <div class="item click" flex="main:center cross:center">
+                <i class="iconfont icon-click"></i>
+                <div class="num">{{item.visit_count > 0 ? item.visit_count : '暂无阅读'}}</div>
+              </div>
+              <div class="item reply" flex="main:center cross:center">
+                <i class="iconfont icon-comment"></i>
+                <div class="num">{{item.reply_count > 0 ? item.reply_count : '暂无评论'}}</div>
+              </div>
+              <div class="item last-reply" flex="main:center cross:center">
+                <time class="time">{{item.last_reply_at | formatDate}}</time>
+              </div>
             </div>
           </router-link>
         </li>
       </ul>
+      <v-loading :complete="complete" :loading="loading" @seeing="seeing"></v-loading>
     </v-content>
     <v-footer></v-footer>
   </div>
@@ -55,31 +66,47 @@
 <script>
 import vFooter from './common/footer'
 import vContent from './common/content'
+import vLoading from './common/loading'
+import pullList from 'pull-list'
+
 export default {
+  mixins:[pullList],
   components : {
     vFooter,
-    vContent
+    vContent,
+    vLoading
   },
-  data () {
-    return {
-      list : [
-        {
-           "id" : "58ad76db7872ea0864fedfcc",
-           "author_id" : "51f0f267f4963ade0e08f503",
-           "tab" : "share",
-           "title": "饿了么大前端 Node.js 进阶教程",
-           "last_reply_at": "2017-03-15T07:03:34.557Z",
-           "good": true,
-           "top": true,
-           "reply_count": 55,
-           "visit_count": 7013,
-           "create_at": "2017-02-22T11:32:43.547Z",
-           "author": {
-               "loginname": "lellansin",
-               "avatar_url": "https://avatars.githubusercontent.com/u/2081487?v=3&s=120"
-           }
-        }
-      ]
+  // created () {
+  //   this.pullList();
+  // },
+  // data () {
+  //   return {
+  //     complete: false,
+  //     loading: false,
+  //     list: {},
+  //     page: 1
+  //   }
+  // },
+  methods: {
+    // seeing () {
+    //
+    // },
+    // pullList () {
+    //   var api = 'https://cnodejs.org/api/v1/topics?page=1&tab=all&limit=3',
+    //       _this = this;
+    //   this.axios.get(api).then((response) => {
+    //       console.log(response);
+    //       _this.list = response.data.data;
+    //
+    //   });
+    // }
+    _pullList (){
+      var {page,$route} = this;
+      var {tab = 'all'} = $route.query;
+      return {
+        url: 'topics',
+        data: {page,tab}
+      }
     }
   }
 }
@@ -125,4 +152,96 @@ export default {
     }
   }
 }
+.list {
+  overflow: hidden;
+  padding:0;
+  margin:0;
+  background: #eee;
+  li{
+     position: relative;
+     padding: 15px 15px 0 15px;
+     margin-bottom: 15px;
+     list-style: none;
+     box-shadow: 0 0 5px #ccc;
+     background: #fff;
+  }
+  .top{
+    height: 40px;
+    .headimg {
+      overflow: hidden;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid #ddd;
+      background-position: center center;
+      background-size: cover;
+    }
+    .box {
+        padding-left: 5px;
+        strong {
+          line-height: 24px;
+          font-size: 16px;
+          font-weight: normal;
+          color: darken(@text, 10%);
+        }
+        time {
+          line-height: 16px;
+          font-size: 12px;
+          font-style: normal;
+          color: #aaa;
+        }
+        .tag {
+          margin-left: 4px;
+          line-height: 16px;
+          font-size: 12px;
+          font-style: normal;
+          color: @main;
+        }
+      }
+  }
+  .tit {
+      padding: 10px 0;
+      line-height: 22px;
+      font-size: 16px;
+      font-weight: bold;
+      color: @text;
+    }
+}
+
+.expand{
+  padding: 10px 0;
+  border-top: 1px solid #e1e1e1;
+  text-align: center;
+  .item {
+      padding: 0 10px;
+      line-height: 20px;
+      text-align: center;
+      border-right: 1px solid #e1e1e1;
+      &:last-of-type {
+        border: none;
+      }
+      .iconfont {
+        color: #aaa;
+      }
+      .num,
+      .time {
+        padding-left: 3px;
+        font-size: 12px;
+        color: #aaa;
+      }
+      .pic,
+      img {
+        width: 16px;
+        height: 16px;
+        background: #e1e1e1;
+        background-size: cover;
+        background-position: center center;
+      }
+      .pic {
+        overflow: hidden;
+        border-radius: 50%;
+      }
+    }
+}
+
 </style>
