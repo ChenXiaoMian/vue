@@ -11,6 +11,7 @@ import * as filters from './filters/'
 import components from './components/common'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import stores from './stores/'
 
 Vue.use(VueAxios, axios);
 
@@ -27,6 +28,7 @@ Object.keys(components).forEach((key) => {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  stores,
   router,
   template: '<App/>',
   components: { App }

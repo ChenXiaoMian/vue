@@ -60,7 +60,8 @@ var ajax = (option) => {
     var xhr = new XMLHttpRequest();
 
     if(setting.type.toUpperCase()==='GET'){
-      xhr.open('GET',setting.url + '?' + query.join('&') + '&' +new.Date().getTime(),true);
+      // xhr.open('GET',setting.url + '?' + query.join('&') + '&' + new.Date().getTime(),true);
+      xhr.open('GET', setting.url + '?' + query.join('&') + '&' + new Date().getTime(), true)
       xhr.send();
     }else{
       xhr.open(setting.type,setting.url,true);
@@ -68,7 +69,7 @@ var ajax = (option) => {
       xhr.send(query.join('&'));
     }
 
-    xhr.onloadend = ({ currentTarget }) = {
+    xhr.onloadend = ({ currentTarget }) => {
       var { response } = currentTarget;
       if ((/application\/json/.test(currentTarget.getAllResponseHeaders()) || setting.dataType === 'json') && /^(\{|\[)([\s\S])*?(\]|\})$/.test(response)) {
         if (key === getPageKey()) nextMethod(_endIntercept, JSON.parse(response), setting.success)

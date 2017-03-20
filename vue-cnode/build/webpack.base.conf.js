@@ -33,6 +33,7 @@ module.exports = {
     // 默认路径代理，例如 import Vue from 'vue'，会自动到 'vue/dist/vue.common.js'中寻找
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'configs$': path.resolve(__dirname, '../config/base.js'), //程序的一些基本配置
       'util$': path.resolve(__dirname, '../src/util/index.js'), //常用工具方法
       'is-seeing$': path.resolve(__dirname, '../src/util/is-seeing.js'),
       'pull-list$': path.resolve(__dirname, '../src/mixins/pull-list.js'), //拉取列表
