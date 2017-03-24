@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "flex.css": "^1.1.6",
+    "github-markdown-css": "^2.4.1",
     "vue": "^2.2.2",
     "vue-router": "^2.2.0",
     "vuex": "^2.2.1"

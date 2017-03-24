@@ -68,24 +68,51 @@ import vFooter from './common/footer'
 import vContent from './common/content'
 import vLoading from './common/loading'
 import pullList from 'pull-list'
+const { history,location } = window
+const getPageKey = () => {
+  return is.object(history.state) ? history.state.key : location.href;
+}
 
 export default {
-  mixins:[pullList],
+  // mixins:[pullList],
   components : {
     vFooter,
     vContent,
     vLoading
   },
-
-  methods: {
-    _pullList (){
-      var { page,$route } = this
-      var { tab = 'all' } = $route.query
-      return {
-        url: 'topics',
-        data: { page,tab }
-      }
+  created () {
+    // this.pullList();
+  },
+  data () {
+    return {
+      complete: false,
+      loading: false,
+      list: {},
+      page: 1
     }
+  },
+  methods: {
+    seeing () {
+      if(this.page === 1) return;
+      this.pullList();
+    },
+    pullList () {
+      var api = 'https://cnodejs.org/api/v1/topics?page=1&tab=all&limit=3',
+          _this = this;
+      this.axios.get(api).then((response) => {
+          console.log(response);
+          _this.list = response.data.data;
+
+      });
+    }
+    // _pullList (){
+    //   var {page,$route} = this;
+    //   var {tab = 'all'} = $route.query;
+    //   return {
+    //     url: 'topics',
+    //     data: {page,tab}
+    //   }
+    // }
   }
 }
 </script>

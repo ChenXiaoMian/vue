@@ -6,12 +6,12 @@ import Login from '@/components/Login'
 import Signout from '@/components/Signout'
 import About from '@/components/About'
 
-import User from '@/components/user/'
+import MyUsername from '@/components/my/MyUsername'
 import MyHome from '@/components/my/MyHome'
 import MyMessages from '@/components/my/MyMessages'
 
 import TopicCreate from '@/components/topic/TopicCreate'
-import TopicVid from '@/components/topicvid/'
+import TopicVid from '@/components/topic/TopicVid'
 
 
 Vue.use(Router)
@@ -51,7 +51,7 @@ export default new Router({
     {
       path: '/user/:username', // 查看用户信息
       meta: { auth: false },
-      component: User
+      component: MyUsername
     },
     {
       path: '/topic/create', // 创建帖子

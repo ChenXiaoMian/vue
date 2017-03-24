@@ -2,8 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import 'flex.css'
 import './less/common.less'
-import './css/common.css'
-import 'github-markdown-css'
 import './assets/iconfont/iconfont.css'
 
 import Vue from 'vue'
