@@ -46,3 +46,8 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+a {
+	color:#000;
+	text-decoration: none;
+	outline: 0; -webkit-text-size-adjust: none; -webkit-tap-highlight-color: rgba(0,0,0,0);  
+}
