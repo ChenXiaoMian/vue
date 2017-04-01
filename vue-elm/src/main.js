@@ -6,6 +6,8 @@ import router from './router'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+import 'common/stylus/index.styl'
+
 Vue.use(VueAxios,axios)
 
 Vue.config.productionTip = false
