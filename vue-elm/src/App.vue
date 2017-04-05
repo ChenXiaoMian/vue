@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import vHeader from './components/common/header.vue'
+import vHeader from './components/header/header.vue'
 const ERR_OK = 0;
 
 export default {
