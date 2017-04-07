@@ -1,10 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
 import Index from '@/components/Index'
-import Goods from '@/components/goods'
-import Ratings from '@/components/ratings'
-import Sell from '@/components/sell'
+import Goods from '@/components/goods/goods'
+import Ratings from '@/components/ratings/ratings'
+import Sell from '@/components/sell/sell'
 
 
 Vue.use(Router)
