@@ -30,7 +30,7 @@
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food" v-on:addCart="_drop"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -38,7 +38,7 @@
         </li>
       </ul>
     </div>
-    <shopcart :select-foods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
   </div>
 </template>
 <script>
@@ -46,6 +46,8 @@ import icons from '../icons/icons'
 import shopcart from '../shopcart/shopcart'
 import cartcontrol from '../cartcontrol/cartcontrol'
 import BScroll from 'better-scroll'
+
+import Vue from 'vue'
 
 const ERR_OK = 0;
 
@@ -71,6 +73,9 @@ export default {
           this._calculateHeight();
         })
       }
+    });
+    this.$on('cart.add',function(target){
+      this._drop(target);
     });
   },
   components: {
@@ -110,6 +115,11 @@ export default {
       let el = foodList[index];
       this.foodsScroll.scrollToElement(el,300);
       console.log(index);
+    },
+    _drop (target) {
+      this.$nextTick(() => {
+        this.$refs.shopcart.drop(target);
+      });
     },
     _initScroll () {
       this.menuScroll = new BScroll(this.$refs.menuWrapper,{
