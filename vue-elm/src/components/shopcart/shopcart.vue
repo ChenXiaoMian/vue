@@ -1,6 +1,7 @@
 <template>
+  <div>
   <div class="shopcart">
-     <div class="content">
+     <div class="content" @click="toggleList">
        <div class="content-left">
          <div class="logo-wrapper">
            <div class="logo" :class="{'highlight':totalCount>0}">
@@ -11,18 +12,45 @@
          <div class="price" :class="{'highlight':totalPrice>0}">￥{{totalPrice}}</div>
          <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
        </div>
-       <div class="content-right">
+       <div class="content-right" @click.stop.prevent="pay">
          <div class="pay" :class="payClass">{{payDesc}}</div>
        </div>
      </div>
      <div class="ball-container">
-        <transition-group v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter">
+        <transition-group name="ball-list" v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:after-enter="afterEnter" tag="div">
           <div v-for="ball in balls" v-bind:key="ball" v-show="ball.show" class="ball"></div>
         </transition-group>
      </div>
+     <transition name="fold">
+     <div class="shopcart-list" v-show="listShow">
+        <div class="list-header">
+          <h1 class="title">购物车</h1>
+          <span class="empty" @click="empty">清空</span>
+        </div>
+        <div class="list-content" ref="listContent">
+          <ul>
+            <li class="food" v-for="food in selectFoods">
+              <span class="name">{{food.name}}</span>
+              <div class="price">
+                <span>￥{{food.price*food.count}}</span>
+              </div>
+              <div class="cartcontrol-wrapper">
+                <cartcontrol :food="food"></cartcontrol>
+              </div>
+            </li>
+          </ul>
+        </div>
+     </div>
+     </transition>
+  </div>
+  <transition name="fade">
+    <div class="list-mask" @click="hideList" v-show="listShow"></div>
+  </transition>
   </div>
 </template>
 <script>
+import BScroll from 'better-scroll'
+import cartcontrol from '../cartcontrol/cartcontrol'
 export default {
   props : {
     selectFoods: {
@@ -62,7 +90,8 @@ export default {
           show : false
         }
       ],
-      dropBalls : []
+      dropBalls : [],
+      fold : true
     }
   },
   computed : {
@@ -96,6 +125,25 @@ export default {
       }else{
         return 'enough';
       }
+    },
+    listShow () {
+      if(!this.totalCount){
+        this.fold = true;
+        return false;
+      }
+      let show = !this.fold;
+      if(show){
+        this.$nextTick(() =>{
+          if(!this.scroll){
+            this.scroll = new BScroll(this.$refs.listContent,{
+              click:true
+            });
+          }else{
+            this.scroll.refresh();
+          }
+        });
+      }
+      return show;
     }
   },
   methods : {
@@ -106,24 +154,18 @@ export default {
           ball.show = true;
           ball.el = el;
           this.dropBalls.push(ball);
-          // console.log(ball);
           return;
         }
-
       }
-
     },
     beforeEnter:function(el){
-
       let count = this.balls.length;
       while (count--) {
         let ball = this.balls[count];
-        console.log(ball.el);
-        // console.log(ball.el.getBoundingClientRect());
         if(ball.show){
           let rect = ball.el.getBoundingClientRect();
-          let x = rect.left - 32;
-          let y = -(window.innerHeight - rect.top - 22);
+          let x = -rect.left - 32;
+          let y = -rect.top - 22;
           el.style.display = '';
           el.style.webkitTransform = `translate3d(${x}px,${y}px,0)`;
           el.style.transform = `translate3d(${x}px,${y}px,0)`;
@@ -141,9 +183,32 @@ export default {
       let ball = this.dropBalls.shift();
       if(ball){
         ball.show = false;
-        // el.style.display = 'none';
+        el.style.display = 'none';
       }
+    },
+    toggleList () {
+      if(!this.totalCount){
+        return;
+      }
+      this.fold = !this.fold;
+    },
+    empty () {
+      this.selectFoods.forEach((food)=>{
+        food.count = 0;
+      });
+    },
+    hideList () {
+      this.fold = true;
+    },
+    pay () {
+      if(this.totalPrice<this.minPrice){
+        return;
+      }
+      window.alert(`支付${this.totalPrice}元`);
     }
+  },
+  components: {
+    cartcontrol
   }
 }
 </script>
@@ -250,5 +315,72 @@ export default {
         transition:all 0.4s linear
         border-radius:50%
         background:rgb(0,160,220)
-
+      .ball-list-move
+        transition:transform 1s
+    .shopcart-list
+      position:absolute
+      left:0
+      top:0
+      z-index:-1
+      width:100%
+      transition:all 0.5s
+      transform:translate3d(0,-100%,0)
+      &.fold-enter-active,&.fold-leave-active
+        transform:translate3d(0,0,0)
+      .list-header
+        height:40px
+        background:#f3f5f7
+        padding:0 18px
+        border-bottom:1px solid rgba(7,17,27,0.1)
+        .title
+          line-height:40px
+          font-size:14px
+          font-weight:200
+          color:rgb(7,17,27)
+          float:left
+        .empty
+          font-size:12px
+          color:rgb(0,160,220)
+          line-height:40px
+          color:#3EADE0
+          float:right
+      .list-content
+        padding:0 18px
+        max-height:217px
+        background:#fff
+        overflow: hidden
+        .food
+          padding:12px 0
+          box-sizing:border-box
+          border-1px(rgba(7,17,27,0.1))
+          .name
+            line-height:24px
+            font-size:14px
+            color:rgb(7,17,27)
+          .price
+            position:absolute
+            right:90px
+            bottom:12px
+            line-height:24px
+            font-size:14px
+            color:rgb(240,20,20)
+            font-weight:700
+          .cartcontrol-wrapper
+            position:absolute
+            right:0
+            bottom:6px
+  .list-mask
+    position:fixed
+    top:0
+    left:0
+    z-index:40
+    width:100%
+    height:100%
+    transition:all 0.3s linear
+    backdrop-filter:blur(10px)
+    background:rgba(7,17,27,0.6)
+    &.fade-enter-active,&.fade-leave-active
+      transition: opacity .5s
+    &.fade-enter,&.fade-leave-active
+      opacity: 0
 </style>
