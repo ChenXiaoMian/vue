@@ -84,6 +84,11 @@ export default {
       this._initScroll();
     });
   },
+  updated () {
+    this.$nextTick(() => {
+      this._initScroll();
+    });
+  },
   methods : {
     _initScroll () {
       if(!this.foodscroll){
