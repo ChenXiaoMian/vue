@@ -14,7 +14,7 @@ Vue.use(Vuex)
 
 Vue.config.productionTip = false
 
-router.push('goods')
+// router.push('goods')
 
 /* eslint-disable no-new */
 new Vue({

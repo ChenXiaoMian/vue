@@ -17,20 +17,29 @@
 </template>
 
 <script>
-import vHeader from './components/header/header.vue'
+import {urlParse} from './common/js/util';
+import vHeader from './components/header/header.vue';
 const ERR_OK = 0;
 
 export default {
   data () {
     return {
-      seller: {}
+      seller: {
+        id:(()=>{
+          let queryParam = urlParse();
+          return queryParam.id;
+        })()
+      }
     }
   },
   created () {
+    // console.log(this.seller.id());
     var _this = this;
-    this.axios.get('/api/seller').then((response) => {
+    this.axios.get('/api/seller?id='+this.seller.id).then((response) => {
       if(response.data.error===ERR_OK){
-        _this.seller = response.data.data;
+        // _this.seller = response.data.data;
+        _this.seller = Object.assign({},this.seller,response.data.data);
+        console.log(_this.seller.id);
       }
     });
   },
