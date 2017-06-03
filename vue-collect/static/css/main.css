@@ -1,0 +1,218 @@
+/*!
+ * Project: CSS Assets
+ * Author: ChenXiaoMian
+ * Date: 2017-05-05 09:31:39
+ */
+
+/* 首页 */
+html{font-size: 62.5%;}
+.body{position: relative;}
+.posAll{position: absolute;top:0;left:0;width:100%;height: 100%;}
+.indexBg{background:url(../img/index/bg.jpg) no-repeat center center;background-size:100% 100%;}
+h1.logo{width: 56%;height: 45px;background:url(../img/index/text.png) no-repeat center top;background-size:100% auto;position: absolute;top:5rem;left:50%;margin-left:-28%;}
+.navIconPos{position: absolute;top:13rem;width: 100%;left:0;}
+.navIcon{display: -webkit-box;display: -webkit-flex;display: flex;width: 95%;margin:0 auto;padding-top: 0.3rem;margin-bottom: 2rem;}
+.navIcon>a{display: block;-webkit-box-flex: 1;-webkit-flex: 1;flex: 1;text-align:center;}
+.navIcon>a .icon{display: block;width: 60px;height: 60px;margin:0 auto 15px;-weikit-border-radius:100%;border-radius:100%;background-size: cover;-webkit-transition:all 0.3s ease-in-out;transition:all 0.3s ease-in-out;}
+.navIcon>a:active .icon{-webkit-transform: scale(1.3,1.3);transform: scale(1.3,1.3);}
+.navIcon>a span{display: block;font-size: 14px;color: #333;-webkit-transition:all 0.3s ease-in-out;transition:all 0.3s ease-in-out;}
+.navIcon>a:active span{color:#0074CB;}
+.stock .icon{background: url(../img/index/icons.png) #f87e4e no-repeat 0 0;}
+.origin .icon{background: url(../img/index/icons.png) #ffc72e no-repeat -60px 0;}
+.output .icon{background: url(../img/index/icons.png) #f8644e no-repeat -122px 0;}
+.envi .icon{background: url(../img/index/icons.png) #3cbaff no-repeat -183px 0;}
+.pieces .icon{background: url(../img/index/icons.png) #93d301 no-repeat -244px 0;}
+.pro .icon{background: url(../img/index/icons.png) #fd6692 no-repeat -305px 0;}
+.trading .icon{background: url(../img/index/icons.png) #f87e4e no-repeat -366px 0;}
+.history .icon{background: url(../img/index/icons.png) #3cbaff no-repeat -427px 0;}
+.temp .icon{background: url(../img/index/icons.png) #6d7a8c no-repeat -488px 0;}
+
+/* 公共 */
+.bg-eaeff3{background: #eaeff3 !important;}
+.bg-efefef{background: #efefef !important;}
+.c-3dbaff{color:#3dbaff !important;}
+.c-c7c7c7{color:#c7c7c7 !important;}
+.c-666666{color:#666666 !important;}
+.c-999999{color:#999999 !important;}
+.c-222222{color:#222222 !important;}
+.c-000000{color:#000000 !important;}
+.fz-36{font-size: 36px !important;}
+.fz-16{font-size: 16px !important;}
+.fz-15{font-size: 15px !important;}
+.lh-24{line-height:24px !important;}
+.adLet{letter-spacing: 1px;}
+.align-start{align-self: flex-start;}
+.align-items-left{align-items:flex-start !important;}
+.direction-column{flex-direction:column !important;}
+.pl-15{padding-left: 15px;}
+.ml-20{margin-left:20px;}
+.ml-40{margin-left:40px;}
+.pt-15{padding-top:15px !important;}
+.mb-10{margin-bottom:10px !important;}
+.text-center{text-align: center !important;}
+.w30{width:30px !important;}
+.d-n{display:none;}
+.clearfix:after {content: ".";display: block; height: 0;clear: both;visibility: hidden;}
+.clearfix {display: inline-block;}
+/* Hides from IE-mac \*/
+* html .clearfix { height: 1%;}
+.clearfix {display: block;}
+/* End hide from IE-mac */
+html{height:100%;}
+body{background: #eaeff3;}
+
+.container, .page{position: absolute;top: 0;right: 0;bottom: 0;left: 0;z-index: 1;}
+.containerInner{background:#eaeff3;}
+.containerInner form{background:#eaeff3;display:block;}
+@-webkit-keyframes a{
+    0% {-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);opacity:0;}
+    to{-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1;}
+}
+@keyframes a{
+    0% {-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);opacity:0;}
+    to {-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1;}
+}
+@-webkit-keyframes b{
+    0% {-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1;}
+    to {-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);opacity:0;}
+}
+@keyframes b {
+    0% {-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1;}
+    to {-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);opacity:0;}
+}
+.page.slideIn {
+    -webkit-animation:a .3s forwards;
+    animation:a .3s forwards
+}
+.page.slideOut {
+    -webkit-animation:b .3s forwards;
+    animation:b .3s forwards
+}
+
+
+/* 头部 */
+.comHead{width: 100%;height: 45px;position: relative;background: #fff;}
+.comHead button.backTo{position: absolute;top:0;left:0;border:0;background: 0;display: block;width: 45px;height: 45px;text-align: center;outline: 0;}
+.comHead button.backTo i{font-size: 24px;color:#3cbaff;font-weight: 700;}
+.comHead .headTitle{font-size: 18px;color: #222;width:100%;line-height: 45px;text-align:center;}
+.comHead .tempLink{font-size: 16px;color: #3dbaff;position: absolute;top:0;right: 10px;line-height: 45px;}
+
+/* weui替换 */
+.flex-20{flex:0 0 20px !important;}
+.weui-cells{font-size: 14px;margin-top: 10px}
+.km-cells-checkbox.weui-cells_checkbox .weui-cell__hd{padding-right: 0}
+.weui-label{width:75px;color: #666;}
+.weui-cell_warn .weui-label{color:#D64937;}
+.weui-cell .km-line{position: relative;}
+.km-line:after{content: " ";position: absolute;right: 0;top: 0;width: 1px;bottom: 0;border-right: 1px solid #ddd;color: #ddd;-webkit-transform-origin: 100% 0;transform-origin: 100% 0;-webkit-transform: scaleX(0.5);    transform: scaleX(0.5);}
+.weui-cell .km-line~.weui-cell__bd{padding-left: 10px;}
+.weui-cell__dw{-webkit-box-flex:  0 0 50px;-webkit-flex:  0 0 50px;flex: 0 0 50px;text-align: right;}
+::-webkit-input-placeholder {color:#c7c7c7;}
+.km-media-box_text{font-size: 14px;}
+.km-media-box_text>p>span{width: 75px;color: #666;display: inline-block;}
+.km-media-box_text>p>b{font-weight:normal;}
+.km-page-button{padding:20px 15px;display: -webkit-box;display: -webkit-flex;display: flex;}
+.km-page-button>a{-webkit-box-flex: 1;-webkit-flex: 1;flex: 1;margin-right: 15px;font-size:16px;}
+.km-page-button>a:last-child{margin-right: 0;}
+.km-page-button .weui-btn+.weui-btn{margin-top: 0;}
+.km-btn_default{color:#3dbaff;border-color: #3dbaff;}
+.km-btn_default:not(.weui-btn_plain-disabled):active{color:#0fa3f4;border-color: #0fa3f4;}
+.km-btn_primary{color:#fff;border-color: #3dbaff;background: #3dbaff;}
+.km-btn_primary:not(.weui-btn_plain-disabled):active{color:#fff;border-color: #0fa3f4;background: #0fa3f4;}
+.weui-dialog__btn_primary{color: #3dbaff;}
+.weui-cell__opa a:visited,.weui-cell__opa a:active{color:#999;}
+
+.km-cells__title{padding:10px 15px;color: #999;font-size: 14px;}
+.km-cells__title~.weui-cells{margin-top:0;}
+.km-history-list .weui-cells:after,.km-history-list .weui-cells:before{border:0;}
+.km-history-info{flex-direction:column;}
+
+.km-search-bar{background:#fff;}
+.km-search-bar:after{border:0;}
+.km-search-bar button.backTo{position: static;height:28px;width:28px;}
+.km-search-bar .weui-search-bar__form{background:#fff;}
+.km-search-bar .weui-search-bar__box{background:#eaeff3;border-radius:15px;}
+.km-search-bar .weui-search-bar__form:after{border:0;}
+.km-search-bar .weui-search-bar__cancel-btn{color:#3cbaff;}
+.weui-search-bar__box .weui-search-bar__input{margin-left:5px;}
+i.ic_none_reminder{display:block;width:55px;height:55px;background:url(../img/ic_none_reminder.png) no-repeat center center;background-size:100% 100%;margin:0 auto 25px;}
+
+.weui-cells_checkbox .weui-check:checked+.weui-icon-checked:before{color:#3dbaff;}
+.km-actionsheet .weui-actionsheet__cell{font-size:15px;margin-left:10px;text-align:left;padding:8px 0;}
+.km-actionsheet .weui-actionsheet__title{height:45px;}
+.km-actionsheet .weui-actionsheet__title:before{border:0;}
+.km-actionsheet .weui-actionsheet__menu{padding-bottom:10px;}
+
+.km-actionsheet .sheetCancel{position: absolute;top:12px;right:12px;border:0;background: 0;display: block;width: 22px;height: 22px;text-align: center;outline: 0;}
+.km-actionsheet .sheetCancel i{font-size: 14px;color:#c8c8c8;font-weight: 700;}
+
+.weui-dialog .weui-input{background:#f6f6f6;padding:8px 10px;width: 93%;font-size:14px;}
+.weui-cells_radio .weui-check:checked+.weui-icon-checked:before{color:#3dbaff;}
+
+.weui-toast{font-size: 14px;}
+.weui-cells_form input:disabled{background:#efefef;}
+.weui-select{height:20px;line-height: 20px;padding-left:0;}
+
+/* 模板管理 */
+.emptyContent{position: absolute;top: 50%;left: 50%;/* transform: translate(-50%, -50%); */width:100%;text-align: center;margin-left:-50%;margin-top:-25%;}
+p.emptyTip{font-size:14px;color:#98a1a8;}
+.emptyContent .btn-link{display:inline-block;font-size:14px;color:#fff;padding:12px 16px;background:#3cbaff;margin-top:10px;-webkit-border-radius:30px;border-radius:30px;}
+.weui-cell__opa{-webkit-box-flex:  0 0 60px;-webkit-flex:  0 0 60px;flex: 0 0 60px;margin-left:10px;}
+
+.posContent{position:absolute;width:100%;min-height:100%;top:0;left:0;padding-top:45px;padding-bottom:83px;background-color:#f00;}
+.tempList-wrap{display:flex;flex-flow:column;height:100%;}
+.tempList-wrap .comHead{flex: 0 0 auto;}
+.tempList-wrap .container{flex:1 0 auto;}
+.templist-button{ flex: 0 0 auto;}
+
+/* 登录 */
+.mt-80{margin-top:80px !important;}
+.login-panel{margin:0px 15px 10px;-webkit-border-radius:5px;border-radius:5px;}
+
+.km-btn-signout{width:80%;margin:3rem auto 0;}
+.km-btn-signout .weui-btn{font-size:15px;color:#F96450;}
+
+.weui-cell__bd span{font-size:14px;color:#999;display:inline-block;padding-left:5px;}
+
+/**
+ *  iPhone 5/5s portrait
+ */
+@media only screen and (max-device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait) {
+.navIconPos{top:11rem;}
+h1.logo{top:4rem;}
+.navIconPos{top:10rem;}
+.navIcon{margin-bottom: .5rem;}
+.navIcon>a .icon{margin:0 auto .5rem;}
+}
+
+/* iPhone 6+ Portrait */
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation : portrait) {
+.navIconPos{top:16rem;}
+.navIcon{margin-bottom: 30px;}
+.km-history-info{flex-direction:row;}
+.km-btn-signout .weui-btn{font-size:16px;}
+}
+
+/**
+ *  Galaxy S3 portrait
+ */
+@media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 2) {
+
+}
+
+/**
+ *  Galaxy S4 landscape & portrait
+ */
+@media screen and (device-width: 320px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+
+}
+
+/**
+ *  Galaxy S5 landscape & portrait
+ */
+@media screen and (device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3) {
+// .navIconPos{top:13rem;}
+// .navIcon{margin-bottom: 1rem;}
+// .navIcon>a .icon{margin:0 auto 1rem;}
+// .km-btn-signout{margin:2rem auto 0;}
+}
