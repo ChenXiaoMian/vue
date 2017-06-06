@@ -9,7 +9,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label w30"><i class="iconfont icon-account c-3dbaff"></i></label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input c-666666" type="text" required placeholder="账号" id="txtusername" emptyTips="请输入账号"/>
+                    <input class="weui-input c-666666" type="text" required placeholder="账号" id="txtusername" v-model="userName" emptyTips="请输入账号"/>
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label w30"><i class="iconfont icon-password c-3dbaff"></i></label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input c-666666" type="password" required placeholder="密码" id="txtuserpass" emptyTips="请输入密码"/>
+                    <input class="weui-input c-666666" type="password" required placeholder="密码" id="txtuserpass" v-model="password" emptyTips="请输入密码"/>
                 </div>
             </div>
         </div>
@@ -32,17 +32,39 @@
 <script>
 import 'weui';
 import weui from 'weui.js';
+import md5 from 'js-md5';
+// import jsonp from 'jsonp';
 export default {
+  data () {
+    return {
+      userName : '',
+      password : ''
+    }
+  },
   created () {
     weui.form.checkIfBlur('#form-login', this.$store.state.regexp);
   },
   methods: {
     actLogin () {
+        var _this = this;
         weui.form.validate('#form-login', function(error){
           if(error){
             error.ele.focus();
           }else{
-            
+            var jsonData = {};
+            jsonData.userName = _this.userName.trim();
+            jsonData.password = md5(_this.password.trim());
+            // console.log(jsonData);
+            _this.$http.jsonp(_this.$store.state.kmUrl+'/loginJSONP',{
+              params : {"parms":JSON.stringify(jsonData)},
+              jsonp : 'jsoncallback'
+            }).then(function(res){
+              console.log(JSON.parse(res.bodyText).s);
+              this.myData = JSON.parse(res.bodyText).s;
+              console.log(this.myData);
+            },function(err){
+              console.log(err);
+            });
           }
         }, this.$store.state.regexp);
         // weui.alert('alert');
