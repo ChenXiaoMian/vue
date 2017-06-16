@@ -1,7 +1,7 @@
 <template>
   <div class="page containerInner">
         <header class="comHead">
-            <button type="button" class="backTo" onclick="pageManager.back();"><i class="iconfont icon-back"></i></button><div class="headTitle">市场存量信息采集</div>
+            <router-link to="/" class="backTo"><i class="iconfont icon-back"></i></router-link><div class="headTitle">市场存量信息采集</div>
         </header>
         <form id="form-stock" name="formStock">
         <div class="weui-cells weui-cells_form">
@@ -86,9 +86,9 @@
         <div class="weui-panel">
             <div class="weui-panel__bd">
                 <div class="weui-media-box weui-media-box_text km-media-box_text">
-                    <p><span class="adLet">信 息 员：</span><b class="getUserName"></b></p>
-                    <p><span>采集地址：</span><b class="getLocation"></b></p>
-                    <p><span>采集时间：</span><b class="getNow"></b></p>
+                    <p><span class="adLet">信 息 员：</span>{{messenger}}</p>
+                    <p><span>采集地址：</span>{{location}}</p>
+                    <p><span>采集时间：</span>{{inputTime}}</p>
                 </div>
             </div>
         </div>
@@ -113,11 +113,34 @@
 </template>
 
 <script>
-export default {
+import weui from 'weui.js';
+import md5 from 'js-md5';
+import store from 'store';
+import Cookies from 'cookies';
+import { formatDate,getPosition } from '../common/js/util';
 
+export default {
+  data () {
+    return {
+      messenger : '',
+      location : getPosition(),
+      inputTime : formatDate(new Date(),'yyyy-MM-dd hh:mm')
+    }
+  },
+  created () {
+
+  },
+  methods: {
+    getNow () {
+      let now = new Date();
+      return now;
+    }
+  }
 }
 </script>
 
 <style>
-
+.adLet{
+  letter-spacing: 0px;
+}
 </style>

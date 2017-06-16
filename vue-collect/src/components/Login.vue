@@ -30,10 +30,10 @@
 </template>
 
 <script>
-import 'weui';
 import weui from 'weui.js';
 import md5 from 'js-md5';
-// import jsonp from 'jsonp';
+import store from 'store';
+
 export default {
   data () {
     return {
@@ -54,14 +54,24 @@ export default {
             var jsonData = {};
             jsonData.userName = _this.userName.trim();
             jsonData.password = md5(_this.password.trim());
-            // console.log(jsonData);
             _this.$http.jsonp(_this.$store.state.kmUrl+'/loginJSONP',{
               params : {"parms":JSON.stringify(jsonData)},
               jsonp : 'jsoncallback'
             }).then(function(res){
-              console.log(JSON.parse(res.bodyText).s);
-              this.myData = JSON.parse(res.bodyText).s;
-              console.log(this.myData);
+              var data = res.body;
+              if(data.result=='success'){
+                store.set('userName', JSON.parse(data.message).name);
+                store.set('loginName', jsonData.userName);
+                store.set('password', jsonData.password);
+                weui.toast('登录成功！', 500);
+                setTimeout(function(){
+                    _this.$router.push('/');
+                },600);
+              }else{
+                weui.topTips('账号或密码错误！');
+                _this.userName = '';
+                _this.password = '';
+              }
             },function(err){
               console.log(err);
             });
