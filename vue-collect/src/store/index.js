@@ -5,8 +5,6 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    todoLists: [],
-    userName: '',
     kmUrl: 'http://km126.km1818.com:8181/KMInfoCollect/services',
     tempNum: 20,
     historyNum: 20,
@@ -15,14 +13,13 @@ const store = new Vuex.Store({
           IDNUM: /(?:^\d{15}$)|(?:^\d{18}$)|^\d{17}[\dXx]$/,
           NUMBER: /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/
       }
-    }
+    },
+    // 地理位置
+    location: ''
   },
   getters: {
-    todoCount(state){
-      return state.todoLists.length
-    },
-    getUserName(state){
-      return state.userName
+    getLocation(state){
+      return state.location
     }
   },
   mutations: {
@@ -35,8 +32,8 @@ const store = new Vuex.Store({
     ONERROR(state,str){
       state.message = str
     },
-    SETUSERNAME(state,name){
-      state.userName = name
+    SETLOCATION(state,context){
+      state.location = context;
     }
   },
   actions: {
@@ -51,12 +48,9 @@ const store = new Vuex.Store({
     onDelTodo({commit},index){
       commit("ONDELTODO",index);
     },
-    setUserName(context,name){
-      if(name.value!=""){
-        content.commit("SETUSERNAME",name);
-        context.commit("ONERROR","");
-      }else{
-        context.commit("ONERROR","添加失败");
+    setLocation({commit},context){
+      if(context.value!=""){
+        commit("SETLOCATION",context);
       }
     }
   },

@@ -17,12 +17,12 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd"><label class="weui-label w30"><i class="iconfont icon-password c-3dbaff"></i></label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input c-666666" type="password" required placeholder="密码" id="txtuserpass" v-model="password" emptyTips="请输入密码"/>
+                    <input class="weui-input c-666666" type="password" required placeholder="密码" id="txtuserpass" v-model="password" emptyTips="请输入密码" @keyup.enter="actLogin"/>
                 </div>
             </div>
         </div>
         <div class="km-page-button">
-            <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="actLogin()">登录</a>
+            <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="actLogin">登录</a>
         </div>
         </form>
     </div>
@@ -33,6 +33,7 @@
 import weui from 'weui.js';
 import md5 from 'js-md5';
 import store from 'store';
+import { getPosition } from '../common/js/util';
 
 export default {
   data () {
@@ -43,6 +44,8 @@ export default {
   },
   created () {
     weui.form.checkIfBlur('#form-login', this.$store.state.regexp);
+    var BMap = window.BMap;
+    getPosition(BMap,this);
   },
   methods: {
     actLogin () {

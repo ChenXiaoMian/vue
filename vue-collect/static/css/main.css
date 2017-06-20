@@ -92,8 +92,8 @@ body{background: #eaeff3;}
 
 /* 头部 */
 .comHead{width: 100%;height: 45px;position: relative;background: #fff;}
-.comHead a.backTo{position: absolute;top:0;left:0;border:0;background: 0;display: block;width: 45px;height: 45px;line-height: 45px;text-align: center;outline: 0;}
-.comHead a.backTo i{font-size: 24px;color:#3cbaff;font-weight: 700;}
+.comHead .backTo{position: absolute;top:0;left:0;border:0;background: 0;display: block;width: 45px;height: 45px;line-height: 45px;text-align: center;outline: 0;}
+.comHead .backTo i{font-size: 24px;color:#3cbaff;font-weight: 700;}
 .comHead .headTitle{font-size: 18px;color: #222;width:100%;line-height: 45px;text-align:center;}
 .comHead .tempLink{font-size: 16px;color: #3dbaff;position: absolute;top:0;right: 10px;line-height: 45px;}
 
@@ -129,7 +129,7 @@ body{background: #eaeff3;}
 
 .km-search-bar{background:#fff;}
 .km-search-bar:after{border:0;}
-.km-search-bar button.backTo{position: static;height:28px;width:28px;}
+.km-search-bar .backTo{position: static;height:28px;width:25px;line-height: 28px;}
 .km-search-bar .weui-search-bar__form{background:#fff;}
 .km-search-bar .weui-search-bar__box{background:#eaeff3;border-radius:15px;}
 .km-search-bar .weui-search-bar__form:after{border:0;}

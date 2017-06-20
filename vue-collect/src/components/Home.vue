@@ -25,9 +25,17 @@
 </template>
 <script>
 import Store from 'store'
+import Vue from 'vue'
+import { getPosition } from '../common/js/util';
+
 export default {
   created () {
+    var _this = this,
+        BMap = window.BMap;
     this.isLogin();
+    Vue.nextTick(function(){
+      getPosition(BMap,_this);
+    });
   },
   methods : {
     isLogin () {
