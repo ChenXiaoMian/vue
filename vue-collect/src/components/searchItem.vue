@@ -14,11 +14,8 @@
         </div>
     </header>
     <div class="weui-cells searchbar-result">
-    	<!-- <li v-for="item in result">
-		    {{ item.market_name }}
-		</li> -->
-        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result">
-        	<div class="weui-cell__bd weui-cell_primary" v-bind:id="item.market_id"><p>{{item.market_name}}</p></div><div class="weui-cell__ft"></div>
+        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result" @click="select" v-bind:id="item.market_id">
+        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.market_name}}</p></div><div class="weui-cell__ft"></div>
         </a>
     </div>
     <div class="emptyContent" v-show="nothing">
@@ -37,10 +34,7 @@ export default {
 			keyword:'',
 			isActive: false,
 			nothing: false,
-			result:[{
-				market_id:7,
-				market_name:'广州市清平中药材专业市场'
-			}],
+			result:[],
 			query: this.$route.query,
 			url:{
 				market: '/likeMarket',
@@ -92,12 +86,10 @@ export default {
 		},
 		post:function(key,jsonData){
 			var _this = this;
-
 			this.$http.jsonp(this.$store.state.kmUrl+key,{
               params : {"parms":JSON.stringify(jsonData)},
               jsonp : 'jsoncallback'
             }).then(function(res){
-              // console.log(JSON.parse(res.body.message));
               var arr = JSON.parse(res.body.message);
               if(arr&&arr!=''){
               	_this.result = JSON.parse(res.body.message);
@@ -108,6 +100,9 @@ export default {
             },function(err){
               // console.log(err);
             });
+		},
+		select:function(){
+
 		}
 	},
 	watch: {
