@@ -11,16 +11,18 @@
             <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'market'}}" data-search="market">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">交易市场</label></div>
                 <div class="weui-cell__bd">
-                    <p class="c-c7c7c7 stockText-market">关键字/市场名称</p>
-                    <input type="hidden" required name="Market" class="stockVal-market" emptyTips="请选择交易市场"/>
+                    <p class="stockText-market" v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{stock.Market}}</p>
+                    <input type="hidden" required name="Market" class="stockVal-market" emptyTips="请选择交易市场" v-model="stock.Market"/>
                 </div>
                 <div class="weui-cell__ft"></div>
             </router-link>
-            <a class="weui-cell weui-cell_access js-itemSearch" href="javascript:;" data-search="medicine">
+            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'medicine'}}" data-search="medicine">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">药材名称</label></div>
-                <div class="weui-cell__bd"><p class="c-c7c7c7 stockText-medicine">关键字/中药材名称</p><input type="hidden" required name="Medicine" class="stockVal-medicine" emptyTips="请选择药材市场"/></div>
+                <div class="weui-cell__bd">
+                    <p class="stockText-medicine" v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{stock.Medicine}}</p>
+                    <input type="hidden" required name="Medicine" class="stockVal-medicine" emptyTips="请选择药材名称"/></div>
                 <div class="weui-cell__ft"></div>
-            </a>
+            </router-link>
         </div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
@@ -109,6 +111,7 @@ import weui from 'weui.js';
 import store from 'store';
 import { formatDate } from '../common/js/util';
 
+
 import comHead from './common/comHead';
 import baseInfo from './common/baseInfo';
 
@@ -122,6 +125,8 @@ export default {
         inputTime: formatDate(new Date(),'yyyy-MM-dd hh:mm')
       },
       stock: {
+        Market: '',
+        Medicine: '',
         MerchantName: '',
         MerchantAddress: '',
         ContactPerson: '',
@@ -131,10 +136,19 @@ export default {
         InventoryCost: '',
         InventoryAddress: '',
         Addition: ''
-      }
+      },
+      isMarket: false,
+      isMedicine: false
     }
   },
   created () {
+    var market = this.$store.getters.getMarket,
+        medicine = this.$store.getters.getMedicine;
+    this.stock.Market = market || '关键字/市场名称';
+    this.stock.Medicine = medicine || '关键字/中药材名称';
+    if(market!='') this.isMarket = true;
+    if(medicine!='') this.isMedicine = true;
+    // console.log(this.$store.getters);
     // this.messenger = store.get('userName');
     // console.log(this.$route);
     // console.log(this.$route.param);

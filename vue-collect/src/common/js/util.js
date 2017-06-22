@@ -34,7 +34,7 @@ export function getPosition(BMap,Vue){
                 location = Vue.$store.getters.getLocation;
             if(location==''){
               Vue.$http.jsonp(url,{}).then(function(res){
-                Vue.$store.dispatch('setLocation',res.body.result.formatted_address);
+                Vue.$store.dispatch('setlocation',res.body.result.formatted_address);
               });
             }
         }else{
