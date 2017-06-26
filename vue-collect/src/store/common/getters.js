@@ -5,8 +5,8 @@ export default {
     getUrl(states){
       return states.kmUrl
     },
-    getEventList(states) {
-        return states.event;
+    getRegexp(states) {
+        return states.regexp;
     },
     getToDo(states){
         return states.event.filter(function (d) {

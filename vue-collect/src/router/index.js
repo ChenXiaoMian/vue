@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import home from '@/components/home'
 import login from '@/components/login'
 import formStock from '@/components/formStock'
+import formOrigin from '@/components/formOrigin'
 import chooseTemp from '@/components/chooseTemp'
 import searchItem from '@/components/searchItem'
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/formStock',
       name: 'formStock',
       component: formStock
+    },
+    {
+      path: '/formOrigin',
+      name: 'formOrigin',
+      component: formOrigin
     },
     {
       path: '/chooseTemp',

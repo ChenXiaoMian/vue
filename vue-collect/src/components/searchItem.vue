@@ -14,8 +14,11 @@
         </div>
     </header>
     <div class="weui-cells searchbar-result">
-        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result" @click="select(item.market_name)" v-bind:id="item.market_id">
+        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.market" @click="select(item.market_name)" v-bind:id="item.market_id">
         	<div class="weui-cell__bd weui-cell_primary"><p>{{item.market_name}}</p></div><div class="weui-cell__ft"></div>
+        </a>
+        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.medicine" @click="select(item.medicine_name)" v-bind:id="item.medicine_id">
+        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.medicine_name}}</p></div><div class="weui-cell__ft"></div>
         </a>
     </div>
     <div class="emptyContent" v-show="nothing">
@@ -34,7 +37,6 @@ export default {
 			keyword:'',
 			isActive: false,
 			nothing: false,
-			result:[],
 			query: this.$route.query,
 			url:{
 				market: '/likeMarket',
@@ -43,6 +45,10 @@ export default {
 				base: '/likeBase',
 				grower: '/likeGrower',
 				manufacturer: '/likeManufacturer'
+			},
+			result:{
+				market:[],
+				medicine:[]
 			}
 		}
 	},
@@ -73,12 +79,12 @@ export default {
 
 			if(timer || jsonData[_this.query.key]==''){
 				_this.nothing = false;
-				_this.result = [];
+				_this.result[_this.query.key] = [];
 				return;
 			};
 
 			timer = setTimeout(function(){
-				_this.result = [];
+				_this.result[_this.query.key] = [];
 				_this.post(key,jsonData);
 				clearTimeout(timer);
                 timer = null;
@@ -92,7 +98,7 @@ export default {
             }).then(function(res){
               var arr = JSON.parse(res.body.message);
               if(arr&&arr!=''){
-              	_this.result = JSON.parse(res.body.message);
+              	_this.result[_this.query.key] = JSON.parse(res.body.message);
               	_this.nothing = false;
               }else{
               	_this.nothing = true;
@@ -102,7 +108,7 @@ export default {
             });
 		},
 		select:function(val){
-			this.$store.dispatch('set'+this.query,val);
+			this.$store.dispatch('set'+this.query.key,val);
 			this.backTo();
 		}
 	},

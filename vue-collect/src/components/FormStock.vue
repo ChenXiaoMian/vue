@@ -8,19 +8,18 @@
                 <div class="weui-cell__bd"><p class="c-c7c7c7 getChooseTemp">默认模板</p></div>
                 <div class="weui-cell__ft"></div>
             </router-link>
-            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'market'}}" data-search="market">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">交易市场</label></div>
+            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'market'}}">
+                <div class="weui-cell__hd km-line"><label class="weui-label">交易市场</label></div>
                 <div class="weui-cell__bd">
                     <p class="stockText-market" v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{stock.Market}}</p>
-                    <input type="hidden" required name="Market" class="stockVal-market" emptyTips="请选择交易市场" v-model="stock.Market"/>
                 </div>
                 <div class="weui-cell__ft"></div>
             </router-link>
-            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'medicine'}}" data-search="medicine">
+            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'medicine'}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">药材名称</label></div>
                 <div class="weui-cell__bd">
                     <p class="stockText-medicine" v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{stock.Medicine}}</p>
-                    <input type="hidden" required name="Medicine" class="stockVal-medicine" emptyTips="请选择药材名称"/></div>
+                </div>
                 <div class="weui-cell__ft"></div>
             </router-link>
         </div>
@@ -88,7 +87,7 @@
         <baseInfo :messenger="baseInfo.messenger" :location="baseInfo.location" :inputTime="baseInfo.inputTime"></baseInfo>
         <div class="km-page-button">
             <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" id="open-temp-dialog">存为模板</a>
-            <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" id="form-stock-submit">上传</a>
+            <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="submit">上传</a>
         </div>
         <!-- 保存弹出框 -->
         <div class="js_dialog" style="display: none;">
@@ -119,6 +118,7 @@ export default {
   data () {
     return {
       pageTitle: '市场存量信息采集',
+      regexp: this.$store.getters.getRegexp,
       baseInfo:{
         messenger: store.get('userName'),
         location: this.$store.getters.getLocation,
@@ -148,16 +148,60 @@ export default {
     this.stock.Medicine = medicine || '关键字/中药材名称';
     if(market!='') this.isMarket = true;
     if(medicine!='') this.isMedicine = true;
-    // console.log(this.$store.getters);
-    // this.messenger = store.get('userName');
-    // console.log(this.$route);
-    // console.log(this.$route.param);
   },
   methods: {
-    getNow () {
-      let now = new Date();
-      return now;
+    submit () {
+        var _this = this;
+        if(!this.isMarket) weui.topTips('请选择交易市场');
+        if(!this.isMedicine) weui.topTips('请选择中药材名称');
+        
+        weui.form.validate('#form-stock', function(error){
+            if(!error){
+                var jsonData = {};
+                jsonData.UserName = store.get('loginName');
+                Object.assign(jsonData,_this.stock); //es6
+                jsonData.Address = _this.baseInfo.location;
+                jsonData.Time = _this.baseInfo.inputTime;
+                // console.log(jsonData);
+                var loading = weui.loading('上传中...');
+                _this.$http.jsonp(_this.$store.getters.getUrl+'/saveInventoryJSONP',{
+                  params : {"parms":JSON.stringify(jsonData)},
+                  jsonp : 'jsoncallback'
+                }).then(function(res){
+                    loading.hide();
+                    weui.toast('上传成功', 2000);
+                    jsonData.hid = new Date().getTime();
+                    jsonData.cUserName = store.get('userName');
+                    if(store.get('histStock') && store.get('histStock')!=''){
+                        // 更新
+                        var histStock = JSON.parse(store.get('histStock'));
+                        histStock.data.unshift(jsonData);
+                        store.remove('histStock');
+                        store.set('histStock',JSON.stringify(histStock));
+                    }else{
+                        // 新建
+                        var historyData = {data : []};
+                        historyData.data.unshift(jsonData);
+                        store.set('histStock',JSON.stringify(historyData));
+                    }
+                    _this.reset();
+                },function(err){
+                  loading.hide();
+                  weui.alert('上传失败');
+                });
+            }
+        },this.regexp);
+    },
+    reset () {
+        this.$store.dispatch('setmarket','');
+        this.$store.dispatch('setmedicine','');
+        this.isMarket = false;
+        this.isMedicine = false;
+        document.formStock.reset();
     }
+  },
+  updated (){
+    weui.form.checkIfBlur('#form-stock', this.regexp);
   },
   components: {
     comHead,
