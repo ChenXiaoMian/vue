@@ -5,20 +5,20 @@
         <div class="weui-cells weui-cells_form">
             <router-link class="weui-cell weui-cell_access js-tempChoose" :to="{path:'/chooseTemp',query:{num:1}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label">选择模板</label></div>
-                <div class="weui-cell__bd"><p class="c-c7c7c7 getChooseTemp">默认模板</p></div>
+                <div class="weui-cell__bd"><p class="c-c7c7c7">默认模板</p></div>
                 <div class="weui-cell__ft"></div>
             </router-link>
             <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'market'}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label">交易市场</label></div>
                 <div class="weui-cell__bd">
-                    <p class="stockText-market" v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{stock.Market}}</p>
+                    <p v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{stock.Market}}</p>
                 </div>
                 <div class="weui-cell__ft"></div>
             </router-link>
             <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'medicine'}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">药材名称</label></div>
                 <div class="weui-cell__bd">
-                    <p class="stockText-medicine" v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{stock.Medicine}}</p>
+                    <p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{stock.Medicine}}</p>
                 </div>
                 <div class="weui-cell__ft"></div>
             </router-link>

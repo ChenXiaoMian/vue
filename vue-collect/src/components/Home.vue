@@ -4,7 +4,7 @@
       <div class="navIconPos">
           <div class="navIcon">
               <router-link to="formStock" class="stock js_item"><div class="icon"></div><span>存量采集</span></router-link>
-              <router-link to="FormOrigin" class="origin js_item"><div class="icon"></div><span>产地采集</span></router-link>
+              <router-link to="formOrigin" class="origin js_item"><div class="icon"></div><span>产地采集</span></router-link>
               <router-link to="FormOutput" class="output js_item"><div class="icon"></div><span>产出采集</span></router-link>
           </div>
           <div class="navIcon">
