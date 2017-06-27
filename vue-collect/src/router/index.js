@@ -4,6 +4,7 @@ import home from '@/components/home'
 import login from '@/components/login'
 import formStock from '@/components/formStock'
 import formOrigin from '@/components/formOrigin'
+import formOutput from '@/components/formOutput'
 import chooseTemp from '@/components/chooseTemp'
 import searchItem from '@/components/searchItem'
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/formOrigin',
       name: 'formOrigin',
       component: formOrigin
+    },
+    {
+      path: '/formOutput',
+      name: 'formOutput',
+      component: formOutput
     },
     {
       path: '/chooseTemp',

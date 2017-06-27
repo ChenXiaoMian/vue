@@ -133,6 +133,9 @@ export default {
         if(growerName!='') this.isGrower = true;
         if(medicine!='') this.isMedicine = true;
     },
+    updated () {
+        weui.form.checkIfBlur('#form-origin', this.regexp);    
+    },
     methods: {
         init () {
             this.origin.BaseName = '关键字/产地名称';
