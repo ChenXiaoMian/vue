@@ -20,6 +20,12 @@
         <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.medicine" @click="select(item.medicine_name)" v-bind:id="item.medicine_id">
         	<div class="weui-cell__bd weui-cell_primary"><p>{{item.medicine_name}}</p></div><div class="weui-cell__ft"></div>
         </a>
+        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.base" @click="select(item.base_name)" v-bind:id="item.base_id">
+        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.base_name}}</p></div><div class="weui-cell__ft"></div>
+        </a>
+        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.grower" @click="select(item.grower_name)" v-bind:id="item.grower_id">
+        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.grower_name}}</p></div><div class="weui-cell__ft"></div>
+        </a>
     </div>
     <div class="emptyContent" v-show="nothing">
         <i class="ic_none_reminder"></i>
@@ -37,7 +43,8 @@ export default {
 			keyword:'',
 			isActive: false,
 			nothing: false,
-			query: this.$route.query,
+			temp: this.$route.query.temp,
+			key: this.$route.query.key,
 			url:{
 				market: '/likeMarket',
 				medicine: '/likeMedicine',
@@ -48,7 +55,11 @@ export default {
 			},
 			result:{
 				market:[],
-				medicine:[]
+				medicine:[],
+				base:[],
+				grower:[],
+				manufacturer:[],
+				cmedicine:[]
 			}
 		}
 	},
@@ -69,22 +80,22 @@ export default {
 			var timer,
 				_this = this,
 				jsonData = {},
-				key = _this.url[_this.query.key];
+				key = _this.url[_this.key];
 
 			jsonData.userName = 'hch';
 	        jsonData.password = 'e10adc3949ba59abbe56e057f20f883e';
 	        // jsonData.userName = store.get('loginName');
 	        // jsonData.password = store.get('password');
-	        jsonData[_this.query.key] = _this.keyword;
+	        jsonData[_this.key] = _this.keyword;
 
-			if(timer || jsonData[_this.query.key]==''){
+			if(timer || jsonData[_this.key]==''){
 				_this.nothing = false;
-				_this.result[_this.query.key] = [];
+				_this.result[_this.key] = [];
 				return;
 			};
 
 			timer = setTimeout(function(){
-				_this.result[_this.query.key] = [];
+				_this.result[_this.key] = [];
 				_this.post(key,jsonData);
 				clearTimeout(timer);
                 timer = null;
@@ -98,7 +109,7 @@ export default {
             }).then(function(res){
               var arr = JSON.parse(res.body.message);
               if(arr&&arr!=''){
-              	_this.result[_this.query.key] = JSON.parse(res.body.message);
+              	_this.result[_this.key] = JSON.parse(res.body.message);
               	_this.nothing = false;
               }else{
               	_this.nothing = true;
@@ -108,7 +119,7 @@ export default {
             });
 		},
 		select:function(val){
-			this.$store.dispatch('set'+this.query.key,val);
+			this.$store.dispatch(`${this.temp}/set${this.key}`,val);
 			this.backTo();
 		}
 	},

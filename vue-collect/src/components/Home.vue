@@ -5,17 +5,17 @@
           <div class="navIcon">
               <router-link to="formStock" class="stock js_item"><div class="icon"></div><span>存量采集</span></router-link>
               <router-link to="formOrigin" class="origin js_item"><div class="icon"></div><span>产地采集</span></router-link>
-              <router-link to="FormOutput" class="output js_item"><div class="icon"></div><span>产出采集</span></router-link>
+              <router-link to="formOutput" class="output js_item"><div class="icon"></div><span>产出采集</span></router-link>
           </div>
           <div class="navIcon">
-              <router-link to="FormEnvi" class="envi js_item"><div class="icon"></div><span>环境采集</span></router-link>
-              <router-link to="FormPieces" class="pieces js_item"><div class="icon"></div><span>饮片采集</span></router-link>
-              <router-link to="FormPro" class="pro js_item"><div class="icon"></div><span>产品采集</span></router-link>
+              <router-link to="formEnvi" class="envi js_item"><div class="icon"></div><span>环境采集</span></router-link>
+              <router-link to="formPieces" class="pieces js_item"><div class="icon"></div><span>饮片采集</span></router-link>
+              <router-link to="formPro" class="pro js_item"><div class="icon"></div><span>产品采集</span></router-link>
           </div>
           <div class="navIcon">
-              <router-link to="FormTrading" class="trading js_item"><div class="icon"></div><span>贸易采集</span></router-link>
-              <router-link to="HistoryData" class="history js_item"><div class="icon"></div><span>历史记录</span></router-link>
-              <router-link to="TempData" class="temp js_item"><div class="icon"></div><span>模板管理</span></router-link>
+              <router-link to="formTrading" class="trading js_item"><div class="icon"></div><span>贸易采集</span></router-link>
+              <router-link to="historyData" class="history js_item"><div class="icon"></div><span>历史记录</span></router-link>
+              <router-link to="tempData" class="temp js_item"><div class="icon"></div><span>模板管理</span></router-link>
           </div>
           <div class="km-btn-signout">
               <router-link to="login" class="weui-btn weui-btn_default">退出登录</router-link>

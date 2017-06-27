@@ -5,11 +5,13 @@ Vue.use(Vuex)
 
 import common from './common';
 import stock from './stock';
+import origin from './origin';
 
 export default new Vuex.Store({
   modules: {
     common,
-    stock
+    stock,
+    origin
   }
 });
 

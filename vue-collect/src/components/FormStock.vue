@@ -10,16 +10,12 @@
             </router-link>
             <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'market'}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label">交易市场</label></div>
-                <div class="weui-cell__bd">
-                    <p v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{stock.Market}}</p>
-                </div>
+                <div class="weui-cell__bd"> <p v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{stock.Market}}</p> </div>
                 <div class="weui-cell__ft"></div>
             </router-link>
             <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'medicine'}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">药材名称</label></div>
-                <div class="weui-cell__bd">
-                    <p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{stock.Medicine}}</p>
-                </div>
+                <div class="weui-cell__bd"> <p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{stock.Medicine}}</p> </div>
                 <div class="weui-cell__ft"></div>
             </router-link>
         </div>
@@ -86,7 +82,7 @@
         </div>
         <baseInfo :messenger="baseInfo.messenger" :location="baseInfo.location" :inputTime="baseInfo.inputTime"></baseInfo>
         <div class="km-page-button">
-            <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" id="open-temp-dialog">存为模板</a>
+            <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="reset">存为模板</a>
             <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="submit">上传</a>
         </div>
         <!-- 保存弹出框 -->
@@ -142,14 +138,23 @@ export default {
     }
   },
   created () {
-    var market = this.$store.getters.getMarket,
-        medicine = this.$store.getters.getMedicine;
+    var market = this.$store.getters['stock/getMarket'],
+        medicine = this.$store.getters['stock/getMedicine'];
     this.stock.Market = market || '关键字/市场名称';
     this.stock.Medicine = medicine || '关键字/中药材名称';
     if(market!='') this.isMarket = true;
     if(medicine!='') this.isMedicine = true;
   },
+  updated () {
+    weui.form.checkIfBlur('#form-stock', this.regexp);    
+  },
   methods: {
+    init () {
+        this.stock.Market = '关键字/市场名称';
+        this.stock.Medicine = '关键字/中药材名称';
+        this.isMarket = false;
+        this.isMedicine = false;
+    },
     submit () {
         var _this = this;
         if(!this.isMarket) weui.topTips('请选择交易市场');
@@ -193,15 +198,11 @@ export default {
         },this.regexp);
     },
     reset () {
-        this.$store.dispatch('setmarket','');
-        this.$store.dispatch('setmedicine','');
-        this.isMarket = false;
-        this.isMedicine = false;
+        this.$store.dispatch('stock/setmarket','');
+        this.$store.dispatch('stock/setmedicine','');
+        this.init();
         document.formStock.reset();
     }
-  },
-  updated (){
-    weui.form.checkIfBlur('#form-stock', this.regexp);
   },
   components: {
     comHead,

@@ -5,7 +5,8 @@ import getters from './getters.js';
 
 const state = {
 	tempID: '',
-	Market: '',
+	BaseName: '',
+	GrowerName: '',
 	Medicine: ''
 }
 var namespaced = true;
