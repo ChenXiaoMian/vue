@@ -109,7 +109,7 @@ body{background: #eaeff3;}
 .weui-cell__dw{-webkit-box-flex:  0 0 50px;-webkit-flex:  0 0 50px;flex: 0 0 50px;text-align: right;}
 ::-webkit-input-placeholder {color:#c7c7c7;}
 .km-media-box_text{font-size: 14px;}
-.km-media-box_text>p>span{width: 75px;color: #666;display: inline-block;}
+.km-media-box_text>p>span{width: 76px;color: #666;display: inline-block;}
 .km-media-box_text>p>b{font-weight:normal;}
 .km-page-button{padding:20px 15px;display: -webkit-box;display: -webkit-flex;display: flex;}
 .km-page-button>a{-webkit-box-flex: 1;-webkit-flex: 1;flex: 1;margin-right: 15px;font-size:16px;}

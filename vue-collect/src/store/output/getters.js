@@ -7,5 +7,8 @@ export default {
     },
     getMedicine(states){
         return states.Medicine;
+    },
+    getCMedicine(states){
+        return states.CMedicine;
     }
 };

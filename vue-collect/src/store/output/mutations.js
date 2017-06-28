@@ -13,5 +13,9 @@ export default {
     // 设置药材名称
     [type.SETMEDICINE](states, obj){
         states.Medicine = obj.medicine
+    },
+    // 设置转产药材名称
+    [type.SETCMEDICINE](states, obj){
+        states.CMedicine = obj.cmedicine
     }
 }

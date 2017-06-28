@@ -26,6 +26,9 @@
         <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.grower" @click="select(item.grower_name)" v-bind:id="item.grower_id">
         	<div class="weui-cell__bd weui-cell_primary"><p>{{item.grower_name}}</p></div><div class="weui-cell__ft"></div>
         </a>
+        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.cmedicine" @click="select(item.medicine_name)" v-bind:id="item.medicine_id">
+        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.medicine_name}}</p></div><div class="weui-cell__ft"></div>
+        </a>
     </div>
     <div class="emptyContent" v-show="nothing">
         <i class="ic_none_reminder"></i>
@@ -86,7 +89,12 @@ export default {
 	        jsonData.password = 'e10adc3949ba59abbe56e057f20f883e';
 	        // jsonData.userName = store.get('loginName');
 	        // jsonData.password = store.get('password');
-	        jsonData[_this.key] = _this.keyword;
+	        if(_this.key=='cmedicine'){
+	        	jsonData['medicine'] = _this.keyword;	
+	        }else{
+	        	jsonData[_this.key] = _this.keyword;	
+	        }
+	        
 
 			if(timer || jsonData[_this.key]==''){
 				_this.nothing = false;

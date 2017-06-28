@@ -40,7 +40,7 @@
                 <div class="weui-cell__dw c-c7c7c7">公斤/亩</div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">产量趋势</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label">产量趋势</label></div>
                 <div class="weui-cell__bd">
                     <select class="weui-select" name="ProdcutionTendency" v-model="output.ProdcutionTendency">
                         <option disabled value="">请选择</option>
@@ -57,7 +57,7 @@
         </div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">采收价格</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label">采收价格</label></div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" required name="Price" placeholder="" emptyTips="请输入采收价格" v-model="output.Price"/>
                 </div>
@@ -66,11 +66,11 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">价格趋势</label></div>
                 <div class="weui-cell__bd">
-                    <select class="weui-select" name="PriceTendency">
-                        <option value="">请选择</option>
-                        <option value="持平">持平</option>
-                        <option value="上升">上升</option>
-                        <option value="下降">下降</option>
+                    <select class="weui-select" name="PriceTendency" v-model="output.PriceTendency">
+                        <option disabled value="">请选择</option>
+                        <option>持平</option>
+                        <option>上升</option>
+                        <option>下降</option>
                     </select>
                 </div>
                 <div class="weui-cell__bd">
@@ -81,22 +81,22 @@
         </div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">种植意愿</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label">种植意愿</label></div>
                 <div class="weui-cell__bd">
-                    <select class="weui-select" name="Wish">
-                        <option value="">请选择</option>
-                        <option value="正常">正常</option>
-                        <option value="强烈">强烈</option>
-                        <option value="非常强烈">非常强烈</option>
-                        <option value="消极">消极</option>
-                        <option value="非常消极">非常消极</option>
+                    <select class="weui-select" name="Wish" v-model="output.Wish">
+                        <option disabled value="">请选择</option>
+                        <option>正常</option>
+                        <option>强烈</option>
+                        <option>非常强烈</option>
+                        <option>消极</option>
+                        <option>非常消极</option>
                     </select>
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">计划面积</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label">计划面积</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" name="PlanArea" placeholder="" emptyTips="请输入计划面积" v-model="output.ChangeArea"/>
+                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" name="PlanArea" placeholder="" emptyTips="请输入计划面积" v-model="output.PlanArea"/>
                 </div>
                 <div class="weui-cell__dw c-c7c7c7">亩</div>
             </div>
@@ -105,23 +105,23 @@
             <div class="weui-cell weui-cells_checkbox km-cells-checkbox">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">是否转产</label></div>
                 <label class="weui-cell__hd weui-check__label ml-20" for="s11">
-                    <input type="radio" class="weui-check" name="ChangeMode" id="s11" value="是"/>
+                    <input type="radio" class="weui-check" name="ChangeMode" id="s11" value="是" v-model="output.ChangeMode" @change="change"/>
                     <i class="weui-icon-checked"></i>是
                 </label>
                 <label class="weui-cell__hd weui-check__label ml-40" for="s12">
-                    <input type="radio" class="weui-check" name="ChangeMode" id="s12" checked="checked" value="否"/>
+                    <input type="radio" class="weui-check" name="ChangeMode" id="s12" value="否" v-model="output.ChangeMode" @change="change"/>
                     <i class="weui-icon-checked"></i>否
                 </label>
             </div>
-            <a class="weui-cell weui-cell_access js-itemSearch disabled" href="javascript:;" id="sClick-cmedicine" data-search="cmedicine">
+            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="cMedicineUrl" data-search="cmedicine">
                 <div class="weui-cell__hd km-line"><label class="weui-label adLet">转产药材</label></div>
-                <div class="weui-cell__bd"><p class="c-c7c7c7 sText-cmedicine bg-efefef">关键字/中药材名称</p><input type="hidden" name="ChangeMedicine" class="sVal-cmedicine" emptyTips="请选择转产药材名称" v-model="output.ChangeMedicine"/></div>
+                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isCMedicine,'c-c7c7c7':!isCMedicine}">{{output.ChangeMedicine}}</p></div>
                 <div class="weui-cell__ft"></div>
-            </a>
+            </router-link>
             <div class="weui-cell">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">转产面积</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" name="ChangeArea" placeholder="" emptyTips="请输入转产面积" disabled="disabled" v-model="output.ChangeArea"/>
+                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" name="ChangeArea" placeholder="" emptyTips="请输入转产面积" :disabled="caDisabled" v-model="output.ChangeArea"/>
                 </div>
                 <div class="weui-cell__dw flex-20 c-c7c7c7">亩</div>
             </div>
@@ -183,38 +183,59 @@ export default {
 	        PriceRange: '',
 	        Wish: '',
 	        PlanArea: '',
-	        ChangeMode: '',
+	        ChangeMode: '否',
 	        ChangeMedicine: '',
 	        ChangeArea: '',
 	        Addition: ''
 	      },
 	      isBase: false,
 	      isGrower: false,
-          isMedicine: false
+          isMedicine: false,
+          isCMedicine: false,
+          caDisabled: true,
+          cMedicineUrl: ''
 	    }
 	},
     created () {
         var baseName = this.$store.getters['output/getBaseName'],
             growerName = this.$store.getters['output/getGrowerName'],
-            medicine = this.$store.getters['output/getMedicine'];
+            medicine = this.$store.getters['output/getMedicine'],
+            cmedicine = this.$store.getters['output/getCMedicine'];
         this.output.BaseName = baseName || '关键字/产地名称';
         this.output.GrowerName = growerName || '关键字/种植户';
         this.output.Medicine = medicine || '关键字/中药材名称';
+        this.output.ChangeMedicine = cmedicine || '关键字/中药材名称';
         if(baseName!='') this.isBase = true;
         if(growerName!='') this.isGrower = true;
         if(medicine!='') this.isMedicine = true;
+        if(cmedicine!='') this.isCMedicine = true;
     },
     updated () {
-        weui.form.checkIfBlur('#form-output', this.regexp);    
+        weui.form.checkIfBlur('#form-output', this.regexp);
     },
     methods: {
         init () {
             this.output.BaseName = '关键字/产地名称';
             this.output.GrowerName = '关键字/种植户';
             this.output.Medicine = '关键字/中药材名称';
+            this.output.ChangeMedicine = '关键字/中药材名称';
             this.isBase = false;
             this.isGrower = false;
             this.isMedicine = false;
+            this.isCMedicine = false;
+        },
+        change (){
+            if(this.output.ChangeMode == '是'){
+                this.caDisabled = false;
+                this.cMedicineUrl = '/searchItem?temp=output&key=cmedicine';
+            }else{
+                this.caDisabled = true;
+                this.output.ChangeArea = '';
+                this.cMedicineUrl = '';
+                this.output.ChangeMedicine = '关键字/中药材名称';
+                this.$store.dispatch('output/setcmedicine','');
+                this.isCMedicine = false;
+            }
         },
         submit () {
             var _this = this;
@@ -263,6 +284,7 @@ export default {
             this.$store.dispatch('output/setbase','');
             this.$store.dispatch('output/setgrower','');
             this.$store.dispatch('output/setmedicine','');
+            this.$store.dispatch('output/setcmedicine','');
             this.init();
             document.formOutput.reset();
         }

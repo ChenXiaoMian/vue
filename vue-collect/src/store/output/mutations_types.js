@@ -6,3 +6,6 @@ export const SETGROWERNAME = 'SETGROWERNAME';
 
 // 设置药材名称
 export const SETMEDICINE = 'SETMEDICINE';
+
+// 设置转产药材名称
+export const SETCMEDICINE = 'SETCMEDICINE';

@@ -7,7 +7,8 @@ const state = {
 	tempID: '',
 	BaseName: '',
 	GrowerName: '',
-	Medicine: ''
+	Medicine: '',
+	CMedicine: ''
 }
 var namespaced = true;
 
