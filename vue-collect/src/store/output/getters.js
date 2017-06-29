@@ -10,5 +10,8 @@ export default {
     },
     getCMedicine(states){
         return states.CMedicine;
-    }
+    },
+    getChangeMode(states){
+        return states.ChangeMode;
+    }    
 };

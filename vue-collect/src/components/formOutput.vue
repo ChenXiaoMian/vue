@@ -42,15 +42,15 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd km-line"><label class="weui-label">产量趋势</label></div>
                 <div class="weui-cell__bd">
-                    <select class="weui-select" name="ProdcutionTendency" v-model="output.ProdcutionTendency">
-                        <option disabled value="">请选择</option>
+                    <select class="weui-select" name="ProdcutionTendency" v-model="output.ProdcutionTendency" @change="changePro">
+                        <option value="">请选择</option>
                         <option>持平</option>
                         <option>上升</option>
                         <option>下降</option>
                     </select>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" disabled="disabled" placeholder="0" name="ProductionRange" v-model="output.ProductionRange"/>
+                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" :disabled="proAbled" placeholder="0" name="ProductionRange" v-model="output.ProductionRange"/>
                 </div>
                 <div class="weui-cell__dw flex-20 c-c7c7c7">%</div>
             </div>
@@ -66,15 +66,15 @@
             <div class="weui-cell">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">价格趋势</label></div>
                 <div class="weui-cell__bd">
-                    <select class="weui-select" name="PriceTendency" v-model="output.PriceTendency">
-                        <option disabled value="">请选择</option>
+                    <select class="weui-select" name="PriceTendency" v-model="output.PriceTendency" @change="changePrice">
+                        <option value="">请选择</option>
                         <option>持平</option>
                         <option>上升</option>
                         <option>下降</option>
                     </select>
                 </div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" disabled="disabled" placeholder="0" name="PriceRange" v-model="output.PriceRange"/>
+                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" :disabled="priceAbled" placeholder="0" name="PriceRange" v-model="output.PriceRange"/>
                 </div>
                 <div class="weui-cell__dw flex-20 c-c7c7c7">%</div>
             </div>
@@ -84,7 +84,7 @@
                 <div class="weui-cell__hd km-line"><label class="weui-label">种植意愿</label></div>
                 <div class="weui-cell__bd">
                     <select class="weui-select" name="Wish" v-model="output.Wish">
-                        <option disabled value="">请选择</option>
+                        <option value="">请选择</option>
                         <option>正常</option>
                         <option>强烈</option>
                         <option>非常强烈</option>
@@ -105,11 +105,11 @@
             <div class="weui-cell weui-cells_checkbox km-cells-checkbox">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">是否转产</label></div>
                 <label class="weui-cell__hd weui-check__label ml-20" for="s11">
-                    <input type="radio" class="weui-check" name="ChangeMode" id="s11" value="是" v-model="output.ChangeMode" @change="change"/>
+                    <input type="radio" class="weui-check" name="ChangeMode" id="s11" value="是" v-model="output.ChangeMode" @change="changeMode"/>
                     <i class="weui-icon-checked"></i>是
                 </label>
                 <label class="weui-cell__hd weui-check__label ml-40" for="s12">
-                    <input type="radio" class="weui-check" name="ChangeMode" id="s12" value="否" v-model="output.ChangeMode" @change="change"/>
+                    <input type="radio" class="weui-check" name="ChangeMode" id="s12" value="否" v-model="output.ChangeMode" @change="changeMode"/>
                     <i class="weui-icon-checked"></i>否
                 </label>
             </div>
@@ -134,8 +134,8 @@
         </div>
         <baseInfo :messenger="baseInfo.messenger" :location="baseInfo.location" :inputTime="baseInfo.inputTime"></baseInfo>
         <div class="km-page-button">
-            <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" id="open-temp-dialog">存为模板</a>
-            <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" id="form-output-submit">上传</a>
+            <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="reset">存为模板</a>
+            <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="submit">上传</a>
         </div>
         <!-- 保存弹出框 -->
         <div class="js_dialog" style="display: none;">
@@ -183,7 +183,7 @@ export default {
 	        PriceRange: '',
 	        Wish: '',
 	        PlanArea: '',
-	        ChangeMode: '否',
+	        ChangeMode: '',
 	        ChangeMedicine: '',
 	        ChangeArea: '',
 	        Addition: ''
@@ -193,7 +193,9 @@ export default {
           isMedicine: false,
           isCMedicine: false,
           caDisabled: true,
-          cMedicineUrl: ''
+          cMedicineUrl: '',
+          proAbled: true,
+          priceAbled: true
 	    }
 	},
     created () {
@@ -209,6 +211,7 @@ export default {
         if(growerName!='') this.isGrower = true;
         if(medicine!='') this.isMedicine = true;
         if(cmedicine!='') this.isCMedicine = true;
+        this.output.ChangeMode = this.$store.getters['output/getChangeMode'];
     },
     updated () {
         weui.form.checkIfBlur('#form-output', this.regexp);
@@ -223,10 +226,30 @@ export default {
             this.isGrower = false;
             this.isMedicine = false;
             this.isCMedicine = false;
+            this.$store.dispatch('output/setchangemode','否');
+            this.output.ChangeMode = this.$store.getters['output/getChangeMode'];
+            this.changeMode();
         },
-        change (){
+        changePro () {
+            if(this.output.ProdcutionTendency == '上升' || this.output.ProdcutionTendency == '下降'){
+                this.proAbled = false;
+            }else{
+                this.proAbled = true;
+                this.output.ProductionRange = '';
+            }
+        },
+        changePrice () {
+            if(this.output.PriceTendency == '上升' || this.output.PriceTendency == '下降'){
+                this.priceAbled = false;
+            }else{
+                this.priceAbled = true;
+                this.output.PriceRange = '';
+            }
+        },
+        changeMode (){
             if(this.output.ChangeMode == '是'){
                 this.caDisabled = false;
+                this.$store.dispatch('output/setchangemode','是');
                 this.cMedicineUrl = '/searchItem?temp=output&key=cmedicine';
             }else{
                 this.caDisabled = true;
@@ -234,49 +257,64 @@ export default {
                 this.cMedicineUrl = '';
                 this.output.ChangeMedicine = '关键字/中药材名称';
                 this.$store.dispatch('output/setcmedicine','');
+                this.$store.dispatch('output/setchangemode','否');
                 this.isCMedicine = false;
             }
         },
         submit () {
             var _this = this;
-            if(!this.isBase) weui.topTips('请选择产地名称');
-            if(!this.isGrower) weui.topTips('请选择种植户');
-            if(!this.isMedicine) weui.topTips('请选择中药材名称');
-            
+            if(!this.isBase){
+                weui.topTips('请选择产地名称');
+                return false;
+            }
+            if(!this.isGrower){
+                weui.topTips('请选择种植户');
+                return false;   
+            }
+            if(!this.isMedicine){
+                weui.topTips('请选择中药材名称');
+                return false;  
+            }
+                        
             weui.form.validate('#form-output', function(error){
                 if(!error){
                     var jsonData = {};
                     jsonData.UserName = store.get('loginName');
-                    Object.assign(jsonData,_this.origin); //es6
+                    Object.assign(jsonData,_this.output); //es6
                     jsonData.Address = _this.baseInfo.location;
                     jsonData.Time = _this.baseInfo.inputTime;
-                    // console.log(jsonData);
-                    var loading = weui.loading('上传中...');
-                    _this.$http.jsonp(_this.$store.getters.getUrl+'/saveGrowBaseJSONP',{
-                      params : {"parms":JSON.stringify(jsonData)},
-                      jsonp : 'jsoncallback'
-                    }).then(function(res){
-                        loading.hide();
-                        weui.toast('上传成功', 2000);
-                        jsonData.hid = new Date().getTime();
-                        jsonData.cUserName = store.get('userName');
-                        if(store.get('histOrigin') && store.get('histOrigin')!=''){
-                            // 更新
-                            var histOrigin = JSON.parse(store.get('histOrigin'));
-                            histOrigin.data.unshift(jsonData);
-                            store.remove('histOrigin');
-                            store.set('histOrigin',JSON.stringify(histOrigin));
-                        }else{
-                            // 新建
-                            var historyData = {data : []};
-                            historyData.data.unshift(jsonData);
-                            store.set('histOrigin',JSON.stringify(historyData));
-                        }
-                        _this.reset();
-                    },function(err){
-                      loading.hide();
-                      weui.alert('上传失败');
-                    });
+                    //过滤选择设置内容
+                    if(_this.isBase == false) jsonData.BaseName = '';
+                    if(_this.isGrower == false) jsonData.GrowerName = '';
+                    if(_this.isMedicine == false) jsonData.Medicine = '';
+                    if(_this.isCMedicine == false) jsonData.ChangeMedicine = '';
+                    console.log(jsonData);
+                    // var loading = weui.loading('上传中...');
+                    // _this.$http.jsonp(_this.$store.getters.getUrl+'/saveGrowOutputJSONP',{
+                    //   params : {"parms":JSON.stringify(jsonData)},
+                    //   jsonp : 'jsoncallback'
+                    // }).then(function(res){
+                    //     loading.hide();
+                    //     weui.toast('上传成功', 2000);
+                    //     jsonData.hid = new Date().getTime();
+                    //     jsonData.cUserName = store.get('userName');
+                    //     if(store.get('histOutput') && store.get('histOutput')!=''){
+                    //         // 更新
+                    //         var histOutput = JSON.parse(store.get('histOutput'));
+                    //         histOutput.data.unshift(jsonData);
+                    //         store.remove('histOutput');
+                    //         store.set('histOutput',JSON.stringify(histOutput));
+                    //     }else{
+                    //         // 新建
+                    //         var historyData = {data : []};
+                    //         historyData.data.unshift(jsonData);
+                    //         store.set('histOutput',JSON.stringify(historyData));
+                    //     }
+                    //     _this.reset();
+                    // },function(err){
+                    //   loading.hide();
+                    //   weui.alert('上传失败');
+                    // });
                 }
             },this.regexp);
         },
@@ -285,8 +323,8 @@ export default {
             this.$store.dispatch('output/setgrower','');
             this.$store.dispatch('output/setmedicine','');
             this.$store.dispatch('output/setcmedicine','');
-            this.init();
             document.formOutput.reset();
+            this.init();
         }
     },
 	components: {

@@ -9,3 +9,6 @@ export const SETMEDICINE = 'SETMEDICINE';
 
 // 设置转产药材名称
 export const SETCMEDICINE = 'SETCMEDICINE';
+
+// 设置是否转产
+export const SETCHANGEMODE = 'SETCHANGEMODE';

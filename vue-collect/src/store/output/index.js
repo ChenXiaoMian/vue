@@ -8,7 +8,8 @@ const state = {
 	BaseName: '',
 	GrowerName: '',
 	Medicine: '',
-	CMedicine: ''
+	CMedicine: '',
+	ChangeMode: '否'
 }
 var namespaced = true;
 

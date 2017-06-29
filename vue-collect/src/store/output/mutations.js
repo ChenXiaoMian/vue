@@ -17,5 +17,9 @@ export default {
     // 设置转产药材名称
     [type.SETCMEDICINE](states, obj){
         states.CMedicine = obj.cmedicine
+    },
+    // 设置是否转产
+    [type.SETCHANGEMODE](states, obj){
+        states.ChangeMode = obj.changemode
     }
 }
