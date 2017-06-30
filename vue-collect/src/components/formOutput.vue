@@ -173,7 +173,7 @@ export default {
 	      output: {
 	        BaseName: '',
 	        GrowerName: '',
-            Medicine: '',
+          Medicine: '',
 	        Area: '',
 	        UnitProduction: '',
 	        ProdcutionTendency: '',
@@ -269,13 +269,13 @@ export default {
             }
             if(!this.isGrower){
                 weui.topTips('请选择种植户');
-                return false;   
+                return false;
             }
             if(!this.isMedicine){
                 weui.topTips('请选择中药材名称');
-                return false;  
+                return false;
             }
-                        
+
             weui.form.validate('#form-output', function(error){
                 if(!error){
                     var jsonData = {};
