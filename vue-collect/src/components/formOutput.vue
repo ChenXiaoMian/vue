@@ -288,33 +288,33 @@ export default {
                     if(_this.isGrower == false) jsonData.GrowerName = '';
                     if(_this.isMedicine == false) jsonData.Medicine = '';
                     if(_this.isCMedicine == false) jsonData.ChangeMedicine = '';
-                    console.log(jsonData);
-                    // var loading = weui.loading('上传中...');
-                    // _this.$http.jsonp(_this.$store.getters.getUrl+'/saveGrowOutputJSONP',{
-                    //   params : {"parms":JSON.stringify(jsonData)},
-                    //   jsonp : 'jsoncallback'
-                    // }).then(function(res){
-                    //     loading.hide();
-                    //     weui.toast('上传成功', 2000);
-                    //     jsonData.hid = new Date().getTime();
-                    //     jsonData.cUserName = store.get('userName');
-                    //     if(store.get('histOutput') && store.get('histOutput')!=''){
-                    //         // 更新
-                    //         var histOutput = JSON.parse(store.get('histOutput'));
-                    //         histOutput.data.unshift(jsonData);
-                    //         store.remove('histOutput');
-                    //         store.set('histOutput',JSON.stringify(histOutput));
-                    //     }else{
-                    //         // 新建
-                    //         var historyData = {data : []};
-                    //         historyData.data.unshift(jsonData);
-                    //         store.set('histOutput',JSON.stringify(historyData));
-                    //     }
-                    //     _this.reset();
-                    // },function(err){
-                    //   loading.hide();
-                    //   weui.alert('上传失败');
-                    // });
+                    // console.log(jsonData);
+                    var loading = weui.loading('上传中...');
+                    _this.$http.jsonp(_this.$store.getters.getUrl+'/saveGrowOutputJSONP',{
+                      params : {"parms":JSON.stringify(jsonData)},
+                      jsonp : 'jsoncallback'
+                    }).then(function(res){
+                        loading.hide();
+                        weui.toast('上传成功', 2000);
+                        jsonData.hid = new Date().getTime();
+                        jsonData.cUserName = store.get('userName');
+                        if(store.get('histOutput') && store.get('histOutput')!=''){
+                            // 更新
+                            var histOutput = JSON.parse(store.get('histOutput'));
+                            histOutput.data.unshift(jsonData);
+                            store.remove('histOutput');
+                            store.set('histOutput',JSON.stringify(histOutput));
+                        }else{
+                            // 新建
+                            var historyData = {data : []};
+                            historyData.data.unshift(jsonData);
+                            store.set('histOutput',JSON.stringify(historyData));
+                        }
+                        _this.reset();
+                    },function(err){
+                      loading.hide();
+                      weui.alert('上传失败');
+                    });
                 }
             },this.regexp);
         },

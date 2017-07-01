@@ -11,18 +11,16 @@
 </template>
 
 <script>
+import store from 'store';
+import { formatDate } from '../../common/js/util';
 
 export default {
-  props:{
-  	messenger: {
-  		type: String
-  	},
-  	location: {
-  		type: String
-  	},
-  	inputTime: {
-  		type: String
-  	}
+  data () {
+    return {
+      messenger: store.get('userName'),
+      location: this.$store.getters.getLocation,
+      inputTime: formatDate(new Date(),'yyyy-MM-dd hh:mm')
+    }
   }
 }
 </script>

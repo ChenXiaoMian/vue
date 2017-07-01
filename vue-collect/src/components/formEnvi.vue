@@ -10,7 +10,7 @@
         </router-link>
         <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'envi',key:'base'}}">
             <div class="weui-cell__hd km-line"><label class="weui-label">产地名称</label></div>
-            <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isBase,'c-c7c7c7':!isBase}"{{envi.BaseName}}</p></div>
+            <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isBase,'c-c7c7c7':!isBase}">{{envi.BaseName}}</p></div>
             <div class="weui-cell__ft"></div>
         </router-link>
     </div>
@@ -64,7 +64,7 @@
         <div class="weui-cell">
             <div class="weui-cell__hd km-line"><label class="weui-label ">产量趋势</label></div>
             <div class="weui-cell__bd">
-                <select class="weui-select" name="Tendency" v-model="envi.Tendency">
+                <select class="weui-select" name="Tendency" v-model="envi.Tendency" @change="changeRange">
                     <option value="">请选择</option>
                     <option>持平</option>
                     <option>上升</option>
@@ -83,7 +83,7 @@
             </div>
         </div>
     </div>
-    <baseInfo :messenger="baseInfo.messenger" :location="baseInfo.location" :inputTime="baseInfo.inputTime"></baseInfo>
+    <baseInfo></baseInfo>
     <div class="km-page-button">
         <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="reset">存为模板</a>
         <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="submit">上传</a>
@@ -113,27 +113,22 @@ import comHead from './common/comHead';
 import baseInfo from './common/baseInfo';
 export default {
   data () {
-	    return {
-	      pageTitle: '环境信息采集',
-	      regexp: this.$store.getters.getRegexp,
-	      baseInfo:{
-	        messenger: store.get('userName'),
-	        location: this.$store.getters.getLocation,
-	        inputTime: formatDate(new Date(),'yyyy-MM-dd hh:mm')
-	      },
-	      envi: {
-	        BaseName: '',
-	        Weather: '',
-	        Disaster: '',
-	        Policy: '',
-	        Tendency: '',
-	        Range: '',
-	        Addition: ''
-	      },
-	      isBase: false,
-        rangeAbled: true
-	    }
-	},
+    return {
+      pageTitle: '环境信息采集',
+      regexp: this.$store.getters.getRegexp,
+      envi: {
+        BaseName: '',
+        Weather: '',
+        Disaster: '',
+        Policy: '',
+        Tendency: '',
+        Range: '',
+        Addition: ''
+      },
+      isBase: false,
+      rangeAbled: true
+    }
+  },
   created (){
     var baseName = this.$store.getters['envi/getBaseName'];
     this.envi.BaseName = baseName || '关键字/产地名称';
@@ -143,76 +138,73 @@ export default {
 
   },
   methods: {
+    init () {
+        this.envi.BaseName = '关键字/产地名称';
+        this.isBase = false;
+    },
+    changeRange () {
+        if(this.envi.Tendency == '上升' || this.envi.Tendency == '下降'){
+            this.rangeAbled = false;
+        }else{
+            this.rangeAbled = true;
+            this.envi.Range = '';
+        }
+    },
     submit () {
         var _this = this;
         if(!this.isBase){
             weui.topTips('请选择产地名称');
             return false;
         }
-        if(!this.isGrower){
-            weui.topTips('请选择种植户');
-            return false;
-        }
-        if(!this.isMedicine){
-            weui.topTips('请选择中药材名称');
-            return false;
-        }
-
-        weui.form.validate('#form-output', function(error){
+        weui.form.validate('#form-envi', function(error){
             if(!error){
                 var jsonData = {};
                 jsonData.UserName = store.get('loginName');
-                Object.assign(jsonData,_this.output); //es6
-                jsonData.Address = _this.baseInfo.location;
-                jsonData.Time = _this.baseInfo.inputTime;
+                Object.assign(jsonData,_this.envi); //es6
+                jsonData.Address = _this.$store.getters.getLocation;
+                jsonData.Time = formatDate(new Date(),'yyyy-MM-dd hh:mm');
                 //过滤选择设置内容
                 if(_this.isBase == false) jsonData.BaseName = '';
-                if(_this.isGrower == false) jsonData.GrowerName = '';
-                if(_this.isMedicine == false) jsonData.Medicine = '';
-                if(_this.isCMedicine == false) jsonData.ChangeMedicine = '';
-                console.log(jsonData);
-                // var loading = weui.loading('上传中...');
-                // _this.$http.jsonp(_this.$store.getters.getUrl+'/saveGrowOutputJSONP',{
-                //   params : {"parms":JSON.stringify(jsonData)},
-                //   jsonp : 'jsoncallback'
-                // }).then(function(res){
-                //     loading.hide();
-                //     weui.toast('上传成功', 2000);
-                //     jsonData.hid = new Date().getTime();
-                //     jsonData.cUserName = store.get('userName');
-                //     if(store.get('histOutput') && store.get('histOutput')!=''){
-                //         // 更新
-                //         var histOutput = JSON.parse(store.get('histOutput'));
-                //         histOutput.data.unshift(jsonData);
-                //         store.remove('histOutput');
-                //         store.set('histOutput',JSON.stringify(histOutput));
-                //     }else{
-                //         // 新建
-                //         var historyData = {data : []};
-                //         historyData.data.unshift(jsonData);
-                //         store.set('histOutput',JSON.stringify(historyData));
-                //     }
-                //     _this.reset();
-                // },function(err){
-                //   loading.hide();
-                //   weui.alert('上传失败');
-                // });
+                // console.log(jsonData);
+                var loading = weui.loading('上传中...');
+                _this.$http.jsonp(_this.$store.getters.getUrl+'/saveGrowEnvironmentJSONP',{
+                  params : {"parms":JSON.stringify(jsonData)},
+                  jsonp : 'jsoncallback'
+                }).then(function(res){
+                    loading.hide();
+                    weui.toast('上传成功', 2000);
+                    jsonData.hid = new Date().getTime();
+                    jsonData.cUserName = store.get('userName');
+                    if(store.get('histEnvi') && store.get('histEnvi')!=''){
+                        // 更新
+                        var histEnvi = JSON.parse(store.get('histEnvi'));
+                        histEnvi.data.unshift(jsonData);
+                        store.remove('histEnvi');
+                        store.set('histEnvi',JSON.stringify(histEnvi));
+                    }else{
+                        // 新建
+                        var historyData = {data : []};
+                        historyData.data.unshift(jsonData);
+                        store.set('histEnvi',JSON.stringify(historyData));
+                    }
+                    _this.reset();
+                },function(err){
+                  loading.hide();
+                  weui.alert('上传失败');
+                });
             }
         },this.regexp);
     },
     reset () {
-        this.$store.dispatch('output/setbase','');
-        this.$store.dispatch('output/setgrower','');
-        this.$store.dispatch('output/setmedicine','');
-        this.$store.dispatch('output/setcmedicine','');
-        document.formOutput.reset();
+        this.$store.dispatch('envi/setbase','');
+        document.formEnvi.reset();
         this.init();
     }
   },
   components: {
-    	comHead,
-    	baseInfo
-	}
+	comHead,
+	baseInfo
+  }
 }
 </script>
 

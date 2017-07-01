@@ -57,7 +57,7 @@ export default {
             var jsonData = {};
             jsonData.userName = _this.userName.trim();
             jsonData.password = md5(_this.password.trim());
-            _this.$http.jsonp(_this.$store.state.kmUrl+'/loginJSONP',{
+            _this.$http.jsonp(_this.$store.getters.getUrl+'/loginJSONP',{
               params : {"parms":JSON.stringify(jsonData)},
               jsonp : 'jsoncallback'
             }).then(function(res){

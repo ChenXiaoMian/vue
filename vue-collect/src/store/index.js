@@ -7,13 +7,15 @@ import common from './common';
 import stock from './stock';
 import origin from './origin';
 import output from './output';
+import envi from './envi';
 
 export default new Vuex.Store({
   modules: {
     common,
     stock,
     origin,
-    output
+    output,
+    envi
   }
 });
 
