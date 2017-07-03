@@ -80,7 +80,7 @@
                 </div>
             </div>
         </div>
-        <baseInfo :messenger="baseInfo.messenger" :location="baseInfo.location" :inputTime="baseInfo.inputTime"></baseInfo>
+        <baseInfo></baseInfo>
         <div class="km-page-button">
             <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="reset">存为模板</a>
             <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="submit">上传</a>
@@ -115,11 +115,6 @@ export default {
     return {
       pageTitle: '市场存量信息采集',
       regexp: this.$store.getters.getRegexp,
-      baseInfo:{
-        messenger: store.get('userName'),
-        location: this.$store.getters.getLocation,
-        inputTime: formatDate(new Date(),'yyyy-MM-dd hh:mm')
-      },
       stock: {
         Market: '',
         Medicine: '',
@@ -165,8 +160,8 @@ export default {
                 var jsonData = {};
                 jsonData.UserName = store.get('loginName');
                 Object.assign(jsonData,_this.stock); //es6
-                jsonData.Address = _this.baseInfo.location;
-                jsonData.Time = _this.baseInfo.inputTime;
+                jsonData.Address = _this.$store.getters.getLocation;
+                jsonData.Time = formatDate(new Date(),'yyyy-MM-dd hh:mm');
                 // console.log(jsonData);
                 var loading = weui.loading('上传中...');
                 _this.$http.jsonp(_this.$store.getters.getUrl+'/saveInventoryJSONP',{

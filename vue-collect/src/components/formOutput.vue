@@ -132,7 +132,7 @@
                 </div>
             </div>
         </div>
-        <baseInfo :messenger="baseInfo.messenger" :location="baseInfo.location" :inputTime="baseInfo.inputTime"></baseInfo>
+        <baseInfo></baseInfo>
         <div class="km-page-button">
             <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="reset">存为模板</a>
             <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="submit">上传</a>
@@ -165,11 +165,6 @@ export default {
 	    return {
 	      pageTitle: '产出信息采集',
 	      regexp: this.$store.getters.getRegexp,
-	      baseInfo:{
-	        messenger: store.get('userName'),
-	        location: this.$store.getters.getLocation,
-	        inputTime: formatDate(new Date(),'yyyy-MM-dd hh:mm')
-	      },
 	      output: {
 	        BaseName: '',
 	        GrowerName: '',
@@ -281,8 +276,8 @@ export default {
                     var jsonData = {};
                     jsonData.UserName = store.get('loginName');
                     Object.assign(jsonData,_this.output); //es6
-                    jsonData.Address = _this.baseInfo.location;
-                    jsonData.Time = _this.baseInfo.inputTime;
+                    jsonData.Address = _this.$store.getters.getLocation;
+                    jsonData.Time = formatDate(new Date(),'yyyy-MM-dd hh:mm');
                     //过滤选择设置内容
                     if(_this.isBase == false) jsonData.BaseName = '';
                     if(_this.isGrower == false) jsonData.GrowerName = '';

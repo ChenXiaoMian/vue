@@ -9,6 +9,7 @@ import formEnvi from '@/components/formEnvi'
 
 import chooseTemp from '@/components/chooseTemp'
 import searchItem from '@/components/searchItem'
+import tempData from '@/components/tempData'
 
 Vue.use(Router)
 
@@ -53,6 +54,11 @@ export default new Router({
       path: '/searchItem',
       name: 'searchItem',
       component: searchItem
+    },
+    {
+      path: '/tempData',
+      name: 'tempData',
+      component: tempData
     }
   ]
 })
