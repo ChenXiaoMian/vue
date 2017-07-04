@@ -26,7 +26,7 @@
     </div>
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
-            <div class="weui-cell__hd km-line"><label class="weui-label ">产量规模<br />(加工量)</label></div>
+            <div class="weui-cell__hd km-line"><label class="weui-label ">产量规模<br>(加工量)</label></div>
             <div class="weui-cell__bd">
                 <select class="weui-select" name="Scale" v-model="pieces.Scale">
                     <option value="">请选择</option>
@@ -142,7 +142,7 @@ export default {
     if(baseName!='') this.isBase = true;
   },
   updated (){
-
+    weui.form.checkIfBlur('#form-pieces', this.regexp);
   },
   methods: {
     init () {
@@ -171,14 +171,14 @@ export default {
             if(!error){
                 var jsonData = {};
                 jsonData.UserName = store.get('loginName');
-                Object.assign(jsonData,_this.envi); //es6
+                Object.assign(jsonData,_this.pieces); //es6
                 jsonData.Address = _this.$store.getters.getLocation;
                 jsonData.Time = formatDate(new Date(),'yyyy-MM-dd hh:mm');
                 //过滤选择设置内容
                 if(_this.isBase == false) jsonData.BaseName = '';
                 // console.log(jsonData);
                 var loading = weui.loading('上传中...');
-                _this.$http.jsonp(_this.$store.getters.getUrl+'/saveGrowEnvironmentJSONP',{
+                _this.$http.jsonp(_this.$store.getters.getUrl+'/saveManufactureSliceJSONP',{
                   params : {"parms":JSON.stringify(jsonData)},
                   jsonp : 'jsoncallback'
                 }).then(function(res){
@@ -186,17 +186,17 @@ export default {
                     weui.toast('上传成功', 2000);
                     jsonData.hid = new Date().getTime();
                     jsonData.cUserName = store.get('userName');
-                    if(store.get('histEnvi') && store.get('histEnvi')!=''){
+                    if(store.get('histPieces') && store.get('histPieces')!=''){
                         // 更新
-                        var histEnvi = JSON.parse(store.get('histEnvi'));
-                        histEnvi.data.unshift(jsonData);
-                        store.remove('histEnvi');
-                        store.set('histEnvi',JSON.stringify(histEnvi));
+                        var histPieces = JSON.parse(store.get('histPieces'));
+                        histPieces.data.unshift(jsonData);
+                        store.remove('histPieces');
+                        store.set('histPieces',JSON.stringify(histPieces));
                     }else{
                         // 新建
                         var historyData = {data : []};
                         historyData.data.unshift(jsonData);
-                        store.set('histEnvi',JSON.stringify(historyData));
+                        store.set('histPieces',JSON.stringify(historyData));
                     }
                     _this.reset();
                 },function(err){
@@ -207,8 +207,10 @@ export default {
         },this.regexp);
     },
     reset () {
-        this.$store.dispatch('envi/setbase','');
-        document.formEnvi.reset();
+        this.$store.dispatch('pieces/setmanufacturer','');
+        this.$store.dispatch('pieces/setmedicine','');
+        this.$store.dispatch('pieces/setbase','');
+        document.formPieces.reset();
         this.init();
     }
   },

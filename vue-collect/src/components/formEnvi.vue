@@ -135,7 +135,7 @@ export default {
     if(baseName!='') this.isBase = true;
   },
   updated (){
-
+    weui.form.checkIfBlur('#form-envi', this.regexp);
   },
   methods: {
     init () {

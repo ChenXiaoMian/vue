@@ -8,6 +8,7 @@ import stock from './stock';
 import origin from './origin';
 import output from './output';
 import envi from './envi';
+import pieces from './pieces';
 
 export default new Vuex.Store({
   modules: {
@@ -15,7 +16,8 @@ export default new Vuex.Store({
     stock,
     origin,
     output,
-    envi
+    envi,
+    pieces
   }
 });
 

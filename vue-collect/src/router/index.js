@@ -6,6 +6,7 @@ import formStock from '@/components/formStock'
 import formOrigin from '@/components/formOrigin'
 import formOutput from '@/components/formOutput'
 import formEnvi from '@/components/formEnvi'
+import formPieces from '@/components/formPieces'
 
 import chooseTemp from '@/components/chooseTemp'
 import searchItem from '@/components/searchItem'
@@ -48,6 +49,11 @@ export default new Router({
       component: formEnvi
     },
     {
+      path: '/formPieces',
+      name: 'formPieces',
+      component: formPieces
+    },
+    {
       path: '/chooseTemp',
       name: 'chooseTemp',
       component: chooseTemp
@@ -66,8 +72,7 @@ export default new Router({
       path: '/historyData',
       name: 'historyData',
       component: historyData
-    }
-    ,
+    },
     {
       path: '/historyList',
       name: 'historyList',
