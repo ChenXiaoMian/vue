@@ -10,6 +10,8 @@ import formEnvi from '@/components/formEnvi'
 import chooseTemp from '@/components/chooseTemp'
 import searchItem from '@/components/searchItem'
 import tempData from '@/components/tempData'
+import historyData from '@/components/historyData'
+import historyList from '@/components/historyList'
 
 Vue.use(Router)
 
@@ -59,6 +61,17 @@ export default new Router({
       path: '/tempData',
       name: 'tempData',
       component: tempData
+    },
+    {
+      path: '/historyData',
+      name: 'historyData',
+      component: historyData
+    }
+    ,
+    {
+      path: '/historyList',
+      name: 'historyList',
+      component: historyList
     }
   ]
 })

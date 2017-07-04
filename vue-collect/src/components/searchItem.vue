@@ -6,7 +6,7 @@
         <form class="weui-search-bar__form" onsubmit="return false;">
             <div class="weui-search-bar__box">
                 <i class="weui-icon-search"></i>
-                <input type="input" class="weui-search-bar__input" placeholder="请输入关键词搜索" @keyup="search()" v-model="keyword"/>
+                <input type="input" class="weui-search-bar__input" placeholder="请输入关键词搜索" @keyup="search()" v-model="keyword">
                 <a href="javascript:" class="weui-icon-clear" @click="clean" v-show="isActive"></a>
             </div>
         </form>
