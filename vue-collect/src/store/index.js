@@ -9,6 +9,7 @@ import origin from './origin';
 import output from './output';
 import envi from './envi';
 import pieces from './pieces';
+import pro from './pro';
 
 export default new Vuex.Store({
   modules: {
@@ -17,7 +18,8 @@ export default new Vuex.Store({
     origin,
     output,
     envi,
-    pieces
+    pieces,
+    pro
   }
 });
 
