@@ -62,7 +62,7 @@ html{height:100%;}
 body{background: #eaeff3;}
 
 .container, .page{position: absolute;top: 0;right: 0;bottom: 0;left: 0;z-index: 1;}
-.containerInner{background:#eaeff3;}
+.containerInner{background:#eaeff3;position: relative;}
 .containerInner form{background:#eaeff3;display:block;}
 @-webkit-keyframes a{
     0% {-webkit-transform:translate3d(100%,0,0);transform:translate3d(100%,0,0);opacity:0;}
@@ -99,7 +99,7 @@ body{background: #eaeff3;}
 
 /* weui替换 */
 .flex-20{flex:0 0 20px !important;}
-.weui-cells{font-size: 14px;margin-top: 10px}
+.weui-cells{font-size: 14px;margin-top:10px;}
 .km-cells-checkbox.weui-cells_checkbox .weui-cell__hd{padding-right: 0}
 .weui-label{width:75px;color: #666;}
 .weui-cell_warn .weui-label{color:#D64937;}
@@ -173,6 +173,11 @@ p.emptyTip{font-size:14px;color:#98a1a8;}
 .km-btn-signout .weui-btn{font-size:15px;color:#F96450;}
 
 .weui-cell__bd span{font-size:14px;color:#999;display:inline-block;padding-left:5px;}
+
+/*搜索页面布局*/
+.searchWrap{position: fixed;left:0;top:0;z-index: 30;width: 100%;background: #eaeff3;height: 100%;}
+.searchContent{position: fixed;top:55px;z-index: 50;left:0;width:100%;height: 100%;overflow: hidden;}
+.searchContent .weui-cells{margin-top:0;}
 
 /**
  *  iPhone 5/5s portrait

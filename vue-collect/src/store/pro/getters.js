@@ -7,5 +7,8 @@ export default {
     },
     getBaseName(states){
         return states.BaseName;
+    },
+    getAll(states){
+        return states.pro;
     }
 };

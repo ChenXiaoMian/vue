@@ -119,6 +119,7 @@
             </div>
         </div>
         </form>
+        
     </div>
 </template>
 
@@ -126,6 +127,7 @@
 import weui from 'weui.js';
 import store from 'store';
 import { formatDate } from '../common/js/util';
+import { mapGetters } from 'vuex';
 
 import comHead from './common/comHead';
 import baseInfo from './common/baseInfo';
@@ -165,6 +167,13 @@ export default {
     if(manu!='') this.isManu = true;
     if(medicine!='') this.isMedicine = true;
     if(baseName!='') this.isBase = true;
+    console.log(this['pro/getMedicine']);
+  },
+  computed : {
+    ...mapGetters([
+        'getUrl',
+        'pro/getMedicine'
+    ])
   },
   updated (){
     weui.form.checkIfBlur('#form-pro', this.regexp);

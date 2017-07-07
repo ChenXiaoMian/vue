@@ -12,6 +12,7 @@
     "test": "npm run e2e"
   },
   "dependencies": {
+    "better-scroll": "^0.2.4",
     "cookies": "^0.7.0",
     "js-md5": "^0.4.2",
     "store": "^2.0.4",

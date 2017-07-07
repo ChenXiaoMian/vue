@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="searchWrap">
 	<header class="comHead">
         <div class="weui-search-bar km-search-bar" v-bind:class="{'weui-search-bar_focusing':isActive}">
         <button type="button" class="backTo" @click="backTo"><i class="iconfont icon-back"></i></button>
@@ -13,35 +13,38 @@
         <a href="javascript:" class="weui-search-bar__cancel-btn" @click="clean" v-show="isActive">取消</a>
         </div>
     </header>
-    <div class="weui-cells searchbar-result">
-        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.market" @click="select(item.market_name)" v-bind:id="item.market_id">
-        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.market_name}}</p></div><div class="weui-cell__ft"></div>
-        </a>
-        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.medicine" @click="select(item.medicine_name)" v-bind:id="item.medicine_id">
-        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.medicine_name}}</p></div><div class="weui-cell__ft"></div>
-        </a>
-        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.base" @click="select(item.base_name)" v-bind:id="item.base_id">
-        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.base_name}}</p></div><div class="weui-cell__ft"></div>
-        </a>
-        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.grower" @click="select(item.grower_name)" v-bind:id="item.grower_id">
-        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.grower_name}}</p></div><div class="weui-cell__ft"></div>
-        </a>
-        <a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.cmedicine" @click="select(item.medicine_name)" v-bind:id="item.medicine_id">
-        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.medicine_name}}</p></div><div class="weui-cell__ft"></div>
-        </a>
-		<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.manufacturer" @click="select(item.manufacturer_name)" v-bind:id="item.manufacturer_id">
-        	<div class="weui-cell__bd weui-cell_primary"><p>{{item.manufacturer_name}}</p></div><div class="weui-cell__ft"></div>
-        </a>
-    </div>
-    <div class="emptyContent" v-show="nothing">
-        <i class="ic_none_reminder"></i>
-        <p class="emptyTip">对不起，没有与“{{keyword}}”相关的内容</p>
-    </div>
+	<div class="searchContent" ref="resultWrap">
+		<div class="weui-cells searchbar-result">
+			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.market" @click="select(item.market_name)" v-bind:id="item.market_id">
+				<div class="weui-cell__bd weui-cell_primary"><p>{{item.market_name}}</p></div><div class="weui-cell__ft"></div>
+			</a>
+			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.medicine" @click="select(item.medicine_name)" v-bind:id="item.medicine_id">
+				<div class="weui-cell__bd weui-cell_primary"><p>{{item.medicine_name}}</p></div><div class="weui-cell__ft"></div>
+			</a>
+			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.base" @click="select(item.base_name)" v-bind:id="item.base_id">
+				<div class="weui-cell__bd weui-cell_primary"><p>{{item.base_name}}</p></div><div class="weui-cell__ft"></div>
+			</a>
+			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.grower" @click="select(item.grower_name)" v-bind:id="item.grower_id">
+				<div class="weui-cell__bd weui-cell_primary"><p>{{item.grower_name}}</p></div><div class="weui-cell__ft"></div>
+			</a>
+			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.cmedicine" @click="select(item.medicine_name)" v-bind:id="item.medicine_id">
+				<div class="weui-cell__bd weui-cell_primary"><p>{{item.medicine_name}}</p></div><div class="weui-cell__ft"></div>
+			</a>
+			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.manufacturer" @click="select(item.manufacturer_name)" v-bind:id="item.manufacturer_id">
+				<div class="weui-cell__bd weui-cell_primary"><p>{{item.manufacturer_name}}</p></div><div class="weui-cell__ft"></div>
+			</a>
+		</div>
+		<div class="emptyContent" v-show="nothing">
+			<i class="ic_none_reminder"></i>
+			<p class="emptyTip">对不起，没有与“{{keyword}}”相关的内容</p>
+		</div>
+	</div>
 </div>
 </template>
 
 <script>
 import store from 'store';
+import BScroll from 'better-scroll';
 
 export default {
 	data () {
@@ -73,6 +76,15 @@ export default {
 		// console.log(this.query.key);
 	},
 	methods: {
+		_initScroll () {
+			if(!this.resultScroll){
+				this.resultScroll = new BScroll(this.$refs.resultWrap,{
+					click:true
+				});
+			}else{
+				this.resultScroll.refresh();
+			}
+		},
 		backTo: function(){
 			this.$router.go(-1);
 		},
@@ -122,6 +134,9 @@ export default {
               if(arr&&arr!=''){
               	_this.result[_this.key] = JSON.parse(res.body.message);
               	_this.nothing = false;
+				_this.$nextTick(() => {
+					_this._initScroll();
+				});
               }else{
               	_this.nothing = true;
               }
