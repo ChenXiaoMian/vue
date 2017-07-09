@@ -39,11 +39,16 @@
                 <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isManu,'c-c7c7c7':!isManu}">{{pro.Manufacturer}}</p></div>
                 <div class="weui-cell__ft"></div>
             </router-link>
-            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'pro',key:'medicine'}}">
+            <!--<router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'pro',key:'medicine'}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label adLet">药材名称</label></div>
                 <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{pro.MedicineName}}</p></div>
                 <div class="weui-cell__ft"></div>
-            </router-link>
+            </router-link>-->
+            <a class="weui-cell weui-cell_access js-itemSearch" @click="search('pro','medicine')">
+                <div class="weui-cell__hd km-line"><label class="weui-label adLet">药材名称</label></div>
+                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{pro.MedicineName}}</p></div>
+                <div class="weui-cell__ft"></div>
+            </a>
             <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'pro',key:'base'}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label">产地名称</label></div>
                 <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isBase,'c-c7c7c7':!isBase}">{{pro.BaseName}}</p></div>
@@ -119,7 +124,7 @@
             </div>
         </div>
         </form>
-        
+        <searchList v-show="isSearch" :searchtemp="searchtemp" :searchkey="searchkey" v-on:searchDone="searchDone"></searchList>
     </div>
 </template>
 
@@ -131,6 +136,7 @@ import { mapGetters } from 'vuex';
 
 import comHead from './common/comHead';
 import baseInfo from './common/baseInfo';
+import searchList from './common/searchList';
 
 export default {
    data () {
@@ -154,29 +160,32 @@ export default {
       },
       isManu: false,
       isMedicine: false,
-      isBase: false
+      isBase: false,
+      isSearch: false,
+      searchtemp: '',
+      searchkey: ''
     }
   },
   created (){
-    var manu = this.$store.getters['pro/getManu'],
-    	medicine = this.$store.getters['pro/getMedicine'],
-        baseName = this.$store.getters['pro/getBaseName'];
-    this.pro.Manufacturer = manu || '关键字/生产商名称';
-    this.pro.MedicineName = medicine || '关键字/中药材名称';
-    this.pro.BaseName = baseName || '关键字/产地名称';
-    if(manu!='') this.isManu = true;
-    if(medicine!='') this.isMedicine = true;
-    if(baseName!='') this.isBase = true;
-    console.log(this['pro/getMedicine']);
+    this.getStore();
+    // console.log(this['pro/getMedicine']);
   },
   computed : {
     ...mapGetters([
         'getUrl',
-        'pro/getMedicine'
+        'pro/getManu',
+        'pro/getMedicine',
+        'pro/getBaseName'
     ])
   },
   updated (){
     weui.form.checkIfBlur('#form-pro', this.regexp);
+  },
+  activated () {
+        
+  },
+  deactivated () {
+    
   },
   methods: {
     init () {
@@ -186,6 +195,26 @@ export default {
         this.isManu = false;
         this.isMedicine = false;
         this.isBase = false;
+    },
+    getStore () {
+        var manu = this['pro/getManu'],
+            medicine = this['pro/getMedicine'],
+            baseName = this['pro/getBaseName'];
+        this.pro.Manufacturer = manu || '关键字/生产商名称';
+        this.pro.MedicineName = medicine || '关键字/中药材名称';
+        this.pro.BaseName = baseName || '关键字/产地名称';
+        if(manu!='') this.isManu = true;
+        if(medicine!='') this.isMedicine = true;
+        if(baseName!='') this.isBase = true;
+    },
+    search (t,k) {
+        this.isSearch = true;
+        this.searchtemp = t;
+        this.searchkey = k;
+    },
+    searchDone () {
+        this.isSearch = false;
+        this.getStore();
     },
     submit () {
         var _this = this;
@@ -250,7 +279,8 @@ export default {
   },
   components: {
 	comHead,
-	baseInfo
+	baseInfo,
+    searchList
   }
 }
 </script>
