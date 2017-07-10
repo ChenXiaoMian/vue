@@ -8,7 +8,7 @@ export default {
     getBaseName(states){
         return states.BaseName;
     },
-    getAll(states){
-        return states.pro;
+    getStandard(states){
+        return states.Standard;
     }
 };

@@ -10,5 +10,8 @@ export default {
     },
     [type.SETBASENAME](states, obj){
         states.BaseName = obj.baseName
+    },
+    [type.SETSTANDARD](states, obj){
+        states.Standard = obj.standard
     }
 }

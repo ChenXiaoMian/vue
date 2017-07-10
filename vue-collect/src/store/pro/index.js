@@ -5,24 +5,10 @@ import getters from './getters.js';
 
 const state = {
 	tempID: '',
-    pro: {
-        Product: '',
-        ProductName: '',
-        Standard: '',
-        ManufacturerName: '',
-        MedicineName: '',
-        BaseName: '',
-        Ratio: '',
-        MedicineStandard: '',
-        Supplier: '',
-        QualityRequire: '',
-        Sale:'',
-        ProductTendency: '',
-        Addition: ''
-    },
     Manufacturer: '',
 	Medicine: '',
-	BaseName: ''
+	BaseName: '',
+    Standard: ''
 }
 var namespaced = true;
 

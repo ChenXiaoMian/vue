@@ -18,7 +18,7 @@
 			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.market" @click="select(item.market_name)" v-bind:id="item.market_id">
 				<div class="weui-cell__bd weui-cell_primary"><p>{{item.market_name}}</p></div><div class="weui-cell__ft"></div>
 			</a>
-			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.medicine" @click="select(item.medicine_name)" v-bind:id="item.medicine_id">
+			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.medicine" @click="select(item.medicine_name,item.standard)" v-bind:id="item.medicine_id">
 				<div class="weui-cell__bd weui-cell_primary"><p>{{item.medicine_name}}</p></div><div class="weui-cell__ft"></div>
 			</a>
 			<a class="weui-cell weui-cell_access searchbar-item" href="javascript:;" v-for="item in result.base" @click="select(item.base_name)" v-bind:id="item.base_id">
@@ -101,7 +101,14 @@ export default {
 			this.isActive = false;
 			this.nothing = false;
 			this.keyword = '';
-			this.result = [];
+			this.result = {
+				market:[],
+				medicine:[],
+				base:[],
+				grower:[],
+				manufacturer:[],
+				cmedicine:[]
+			};
 		},
 		search:function(ev){
 			var timer,
@@ -142,6 +149,7 @@ export default {
               var arr = JSON.parse(res.body.message);
               if(arr&&arr!=''){
               	_this.result[_this.searchkey] = JSON.parse(res.body.message);
+				console.log(_this.result[_this.searchkey]);
               	_this.nothing = false;
 				_this.$nextTick(() => {
 					_this._initScroll();
@@ -153,9 +161,10 @@ export default {
               // console.log(err);
             });
 		},
-		select:function(val){
+		select:function(val,standard){
 			this.$store.dispatch(`${this.searchtemp}/set${this.searchkey}`,val);
 			// this.backTo();
+			if(this.searchtemp=='pro') this.$store.dispatch(`${this.searchtemp}/setstandard`,standard);
 			this.$emit('searchDone');
 			this.clean();
 		}

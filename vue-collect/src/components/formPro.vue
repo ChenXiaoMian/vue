@@ -34,26 +34,21 @@
             </div>
         </div>
         <div class="weui-cells weui-cells_form">
-            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'pro',key:'manufacturer'}}">
+            <a class="weui-cell weui-cell_access js-itemSearch" @click="search('pro','manufacturer')">
                 <div class="weui-cell__hd km-line"><label class="weui-label adLet">生 产 商</label></div>
-                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isManu,'c-c7c7c7':!isManu}">{{pro.Manufacturer}}</p></div>
+                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isManu,'c-c7c7c7':!isManu}">{{pro.ManufacturerName}}</p></div>
                 <div class="weui-cell__ft"></div>
-            </router-link>
-            <!--<router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'pro',key:'medicine'}}">
-                <div class="weui-cell__hd km-line"><label class="weui-label adLet">药材名称</label></div>
-                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{pro.MedicineName}}</p></div>
-                <div class="weui-cell__ft"></div>
-            </router-link>-->
+            </a>
             <a class="weui-cell weui-cell_access js-itemSearch" @click="search('pro','medicine')">
                 <div class="weui-cell__hd km-line"><label class="weui-label adLet">药材名称</label></div>
                 <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{pro.MedicineName}}</p></div>
                 <div class="weui-cell__ft"></div>
             </a>
-            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'pro',key:'base'}}">
+            <a class="weui-cell weui-cell_access js-itemSearch" @click="search('pro','base')">
                 <div class="weui-cell__hd km-line"><label class="weui-label">产地名称</label></div>
                 <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isBase,'c-c7c7c7':!isBase}">{{pro.BaseName}}</p></div>
                 <div class="weui-cell__ft"></div>
-            </router-link>
+            </a>
         </div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
@@ -67,6 +62,8 @@
                 <div class="weui-cell__hd km-line"><label class="weui-label ">药材规格</label></div>
                 <div class="weui-cell__bd">
                     <select class="weui-select" name="MedicineStandard" v-model="pro.MedicineStandard">
+                        <option value="">请选择</option>
+                        <option :value="item" v-for="item in standard">{{item}}</option>
                     </select>
                 </div>
                 <div class="weui-cell__ft"></div>
@@ -163,49 +160,47 @@ export default {
       isBase: false,
       isSearch: false,
       searchtemp: '',
-      searchkey: ''
+      searchkey: '',
+      standard: []
     }
   },
   created (){
     this.getStore();
-    // console.log(this['pro/getMedicine']);
   },
   computed : {
     ...mapGetters([
         'getUrl',
         'pro/getManu',
         'pro/getMedicine',
-        'pro/getBaseName'
+        'pro/getBaseName',
+        'pro/getStandard'
     ])
   },
   updated (){
     weui.form.checkIfBlur('#form-pro', this.regexp);
   },
-  activated () {
-        
-  },
-  deactivated () {
-    
-  },
   methods: {
     init () {
-    	this.pro.Manufacturer = '关键字/生产商名称';
+    	this.pro.ManufacturerName = '关键字/生产商名称';
     	this.pro.MedicineName = '关键字/中药材名称';
         this.pro.BaseName = '关键字/产地名称';
         this.isManu = false;
         this.isMedicine = false;
         this.isBase = false;
+        this.standard = [];
     },
     getStore () {
         var manu = this['pro/getManu'],
             medicine = this['pro/getMedicine'],
             baseName = this['pro/getBaseName'];
-        this.pro.Manufacturer = manu || '关键字/生产商名称';
+        this.pro.ManufacturerName = manu || '关键字/生产商名称';
         this.pro.MedicineName = medicine || '关键字/中药材名称';
         this.pro.BaseName = baseName || '关键字/产地名称';
         if(manu!='') this.isManu = true;
         if(medicine!='') this.isMedicine = true;
         if(baseName!='') this.isBase = true;
+        var standard = this['pro/getStandard'] ? this['pro/getStandard'] : '';
+        if(standard!='')  this.standard = standard.split(',');
     },
     search (t,k) {
         this.isSearch = true;
@@ -218,6 +213,20 @@ export default {
     },
     submit () {
         var _this = this;
+        var getUrl = function(val){
+            var url = '';
+            switch(val){
+                case '成药':
+                    return url = '/saveManufactureMedicineJSONP';
+                    break;
+                case '食品':
+                    return url = '/saveManufactureFoodJSONP';
+                    break;
+                case '保健品':
+                    return url = '/saveManufactureHealthProductsJSONP';
+                    break;
+            }
+        };
         if(!this.isManu){
             weui.topTips('请选择生产商名称');
             return false;
@@ -239,33 +248,33 @@ export default {
                 jsonData.Time = formatDate(new Date(),'yyyy-MM-dd hh:mm');
                 //过滤选择设置内容
                 if(_this.isBase == false) jsonData.BaseName = '';
-                console.log(jsonData);
-                // var loading = weui.loading('上传中...');
-                // _this.$http.jsonp(_this.$store.getters.getUrl+'/saveManufactureSliceJSONP',{
-                //   params : {"parms":JSON.stringify(jsonData)},
-                //   jsonp : 'jsoncallback'
-                // }).then(function(res){
-                //     loading.hide();
-                //     weui.toast('上传成功', 2000);
-                //     jsonData.hid = new Date().getTime();
-                //     jsonData.cUserName = store.get('userName');
-                //     if(store.get('histPieces') && store.get('histPieces')!=''){
-                //         // 更新
-                //         var histPieces = JSON.parse(store.get('histPieces'));
-                //         histPieces.data.unshift(jsonData);
-                //         store.remove('histPieces');
-                //         store.set('histPieces',JSON.stringify(histPieces));
-                //     }else{
-                //         // 新建
-                //         var historyData = {data : []};
-                //         historyData.data.unshift(jsonData);
-                //         store.set('histPieces',JSON.stringify(historyData));
-                //     }
-                //     _this.reset();
-                // },function(err){
-                //   loading.hide();
-                //   weui.alert('上传失败');
-                // });
+                // console.log(jsonData);
+                var loading = weui.loading('上传中...');
+                _this.$http.jsonp(_this.$store.getters.getUrl+getUrl(_this.pro.Product),{
+                  params : {"parms":JSON.stringify(jsonData)},
+                  jsonp : 'jsoncallback'
+                }).then(function(res){
+                    loading.hide();
+                    weui.toast('上传成功', 2000);
+                    jsonData.hid = new Date().getTime();
+                    jsonData.cUserName = store.get('userName');
+                    if(store.get('histPro') && store.get('histPro')!=''){
+                        // 更新
+                        var histPro = JSON.parse(store.get('histPro'));
+                        histPro.data.unshift(jsonData);
+                        store.remove('histPro');
+                        store.set('histPro',JSON.stringify(histPro));
+                    }else{
+                        // 新建
+                        var historyData = {data : []};
+                        historyData.data.unshift(jsonData);
+                        store.set('histPro',JSON.stringify(historyData));
+                    }
+                    _this.reset();
+                },function(err){
+                  loading.hide();
+                  weui.alert('上传失败');
+                });
             }
         },this.regexp);
     },
