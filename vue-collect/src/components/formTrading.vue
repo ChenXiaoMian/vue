@@ -1,44 +1,36 @@
 <template>
     <div class="containerInner">
         <comHead :pageTitle="pageTitle"></comHead>
-        <form id="form-pro" name="formPro" autocomplete="off">
+        <form id="form-trading" name="formTrading" autocomplete="off">
         <div class="weui-cells weui-cells_form">
             <router-link class="weui-cell weui-cell_access js-tempChoose" :to="{path:'/chooseTemp',query:{num:1}}">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">选择模板</label></div>
                 <div class="weui-cell__bd"><p class="c-3dbaff getChooseTemp">默认模板</p></div>
                 <div class="weui-cell__ft"></div>
             </router-link>
-            <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label">产品类型</label></div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" required name="Product" v-model="pro.Product">
-                        <option value="">请选择</option>
-                        <option>成药</option>
-                        <option>食品</option>
-                        <option>保健品</option>
-                    </select>
-                </div>
+            <a class="weui-cell weui-cell_access js-itemSearch" @click="search('trading','market')">
+                <div class="weui-cell__hd km-line"><label class="weui-label adLet">交易市场</label></div>
+                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{pro.Market}}</p></div>
                 <div class="weui-cell__ft"></div>
-            </div>
+            </a>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">产品名称</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label ">商户名称</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" placeholder="请填写产品名称" name="ProductName" v-model="pro.ProductName">
+                    <input class="weui-input" required type="text" placeholder="请填写商户名称" name="MerchantName"/>
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">产品规格</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label ">经营规模</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" placeholder="请填写产品规格" name="Standard" v-model="pro.Standard">
+                    <select class="weui-select" name="Scale">
+                        <option value="">请选择</option>
+                        <option value="大户">大户</option>
+                        <option value="散户">散户</option>
+                    </select>
                 </div>
             </div>
         </div>
         <div class="weui-cells weui-cells_form">
-            <a class="weui-cell weui-cell_access js-itemSearch" @click="search('pro','manufacturer')">
-                <div class="weui-cell__hd km-line"><label class="weui-label adLet">生 产 商</label></div>
-                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isManu,'c-c7c7c7':!isManu}">{{pro.ManufacturerName}}</p></div>
-                <div class="weui-cell__ft"></div>
-            </a>
             <a class="weui-cell weui-cell_access js-itemSearch" @click="search('pro','medicine')">
                 <div class="weui-cell__hd km-line"><label class="weui-label adLet">药材名称</label></div>
                 <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{pro.MedicineName}}</p></div>
@@ -49,57 +41,79 @@
                 <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isBase,'c-c7c7c7':!isBase}">{{pro.BaseName}}</p></div>
                 <div class="weui-cell__ft"></div>
             </a>
-        </div>
-        <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">原药比重</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label ">交易类型</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" placeholder="" name="Ratio" v-model="pro.Ratio">
-                </div>
-                <div class="weui-cell__dw c-c7c7c7">%</div>
-            </div>
-            <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">药材规格</label></div>
-                <div class="weui-cell__bd">
-                    <select class="weui-select" name="MedicineStandard" v-model="pro.MedicineStandard">
+                    <select class="weui-select" name="MedicineType">
                         <option value="">请选择</option>
-                        <option v-bind:value="item" v-for="item in standard">{{item}}</option>
+                        <option value="原药材">原药材</option>
+                        <option value="饮片">饮片</option>
                     </select>
                 </div>
-                <div class="weui-cell__ft"></div>
             </div>
         </div>
+        </form>
+        <div class="innerType">
+        <form id="innerType1" name="innerType1" autocomplete="off">
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label adLet">供 应 商<br>(原药材)</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label adLet">规 格 1</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" placeholder="请填写原药材供应商名称" name="Supplier" v-model="pro.Supplier">
+                    <select class="weui-select" name="Standard">
+                    </select>
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">质量要求<br>(原药材)</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label ">交易数量<br />(日平均)</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" placeholder="请填写原药材质量要求" name="QualityRequire" v-model="pro.QualityRequire">
+                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" placeholder="" name="TradeProduction"/>
                 </div>
+                <div class="weui-cell__dw c-c7c7c7">公斤</div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">年销售额<br>(产品)</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label ">交易价格<br />(日平均)</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" placeholder="" name="Sale" v-model="pro.Sale">
+                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" required placeholder="" name="Price" emptyTips="请输入交易价格"/>
                 </div>
-                <div class="weui-cell__dw c-c7c7c7">元</div>
+                <div class="weui-cell__dw c-c7c7c7">元/公斤</div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">需求趋势<br>(产品)</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label">价格趋势</label></div>
                 <div class="weui-cell__bd">
-                    <input class="weui-input" type="text" placeholder="请填写产品需求趋势" name="ProductTendency" v-model="pro.ProductTendency">
+                    <select class="weui-select" name="PriceTendency">
+                        <option value="">请选择</option>
+                        <option value="持平">持平</option>
+                        <option value="上升">上升</option>
+                        <option value="下降">下降</option>
+                    </select>
                 </div>
-                <div class="weui-cell__ft"></div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" pattern="REG_NUMBER" notmatchtips="请输入正确的数字格式" disabled="disabled" placeholder="0" name="PriceRange"/>
+                </div>
+                <div class="weui-cell__dw flex-20 c-c7c7c7">%</div>
             </div>
+            <div class="weui-cell">
+                <div class="weui-cell__hd km-line"><label class="weui-label">市场表现</label></div>
+                <div class="weui-cell__bd">
+                    <select class="weui-select" name="MarketStatus">
+                        <option value="">请选择</option>
+                        <option value="正常">正常</option>
+                        <option value="活跃">活跃</option>
+                        <option value="不活跃">不活跃</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        </form>
+        </div>
+        <a href="javascript:void(0);" class="weui-cell weui-cell_link text-center" id="btnAddStandard">
+            <div class="weui-cell__bd c-3dbaff"><i class="iconfont icon-add"></i> 增加规格</div>
+        </a>
+        <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
                 <div class="weui-cell__hd km-line align-start"><label class="weui-label ">备注说明</label></div>
                 <div class="weui-cell__bd">
-                    <textarea class="weui-textarea" name="Addition" placeholder="请填写备注说明" rows="3" v-model="pro.Addition"></textarea>
+                    <textarea class="weui-textarea" name="Addition" placeholder="请填写备注说明" rows="3"></textarea>
                 </div>
             </div>
         </div>
@@ -120,7 +134,7 @@
                 </div>
             </div>
         </div>
-        </form>
+        
         <searchList v-show="isSearch" :searchtemp="searchtemp" :searchkey="searchkey" v-on:searchDone="searchDone"></searchList>
     </div>
 </template>
@@ -134,11 +148,10 @@ import { mapGetters } from 'vuex';
 import comHead from './common/comHead';
 import baseInfo from './common/baseInfo';
 import searchList from './common/searchList';
-
 export default {
-   data () {
+  data () {
     return {
-      pageTitle: '产品信息采集',
+      pageTitle: '贸易信息采集',
       regexp: this.$store.getters.getRegexp,
       pro: {
         Product: '',
