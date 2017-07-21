@@ -8,16 +8,16 @@
                 <div class="weui-cell__bd"><p class="c-c7c7c7">默认模板</p></div>
                 <div class="weui-cell__ft"></div>
             </router-link>
-            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'market'}}">
+            <a class="weui-cell weui-cell_access js-itemSearch" @click="search('stock','market')">
                 <div class="weui-cell__hd km-line"><label class="weui-label">交易市场</label></div>
                 <div class="weui-cell__bd"> <p v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{stock.Market}}</p> </div>
                 <div class="weui-cell__ft"></div>
-            </router-link>
-            <router-link class="weui-cell weui-cell_access js-itemSearch" :to="{path:'/searchItem',query:{temp:'stock',key:'medicine'}}">
+            </a>
+            <a class="weui-cell weui-cell_access js-itemSearch" @click="search('stock','medicine')">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">药材名称</label></div>
                 <div class="weui-cell__bd"> <p v-bind:class="{'c-3dbaff':isMedicine,'c-c7c7c7':!isMedicine}">{{stock.Medicine}}</p> </div>
                 <div class="weui-cell__ft"></div>
-            </router-link>
+            </a>
         </div>
         <div class="weui-cells weui-cells_form">
             <div class="weui-cell">
@@ -98,6 +98,7 @@
             </div>
         </div>
         </form>
+        <searchList v-show="isSearch" :searchtemp="searchtemp" :searchkey="searchkey" v-on:searchDone="searchDone"></searchList>
     </div>
 </template>
 
@@ -109,6 +110,7 @@ import { formatDate } from '../common/js/util';
 
 import comHead from './common/comHead';
 import baseInfo from './common/baseInfo';
+import searchList from './common/searchList';
 
 export default {
   data () {
@@ -129,16 +131,15 @@ export default {
         Addition: ''
       },
       isMarket: false,
-      isMedicine: false
+      isMedicine: false,
+      //搜索项
+      isSearch: false,
+      searchtemp: '',
+      searchkey: ''
     }
   },
   created () {
-    var market = this.$store.getters['stock/getMarket'],
-        medicine = this.$store.getters['stock/getMedicine'];
-    this.stock.Market = market || '关键字/市场名称';
-    this.stock.Medicine = medicine || '关键字/中药材名称';
-    if(market!='') this.isMarket = true;
-    if(medicine!='') this.isMedicine = true;
+    this.getStore();
   },
   updated () {
     weui.form.checkIfBlur('#form-stock', this.regexp);    
@@ -149,6 +150,23 @@ export default {
         this.stock.Medicine = '关键字/中药材名称';
         this.isMarket = false;
         this.isMedicine = false;
+    },
+    getStore () {
+        var market = this.$store.getters['stock/getMarket'],
+            medicine = this.$store.getters['stock/getMedicine'];
+        this.stock.Market = market || '关键字/市场名称';
+        this.stock.Medicine = medicine || '关键字/中药材名称';
+        if(market!='') this.isMarket = true;
+        if(medicine!='') this.isMedicine = true;
+    },
+    search (t,k) {
+        this.isSearch = true;
+        this.searchtemp = t;
+        this.searchkey = k;
+    },
+    searchDone () {
+        this.isSearch = false;
+        this.getStore();
     },
     submit () {
         var _this = this;
@@ -201,7 +219,8 @@ export default {
   },
   components: {
     comHead,
-    baseInfo
+    baseInfo,
+    searchList
   }
 }
 </script>

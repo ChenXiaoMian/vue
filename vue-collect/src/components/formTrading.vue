@@ -10,17 +10,17 @@
             </router-link>
             <a class="weui-cell weui-cell_access js-itemSearch" @click="search('trading','market')">
                 <div class="weui-cell__hd km-line"><label class="weui-label adLet">交易市场</label></div>
-                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{pro.Market}}</p></div>
+                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{trading.Market}}</p></div>
                 <div class="weui-cell__ft"></div>
             </a>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">商户名称</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label">商户名称</label></div>
                 <div class="weui-cell__bd">
                     <input class="weui-input" required type="text" placeholder="请填写商户名称" name="MerchantName"/>
                 </div>
             </div>
             <div class="weui-cell">
-                <div class="weui-cell__hd km-line"><label class="weui-label ">经营规模</label></div>
+                <div class="weui-cell__hd km-line"><label class="weui-label">经营规模</label></div>
                 <div class="weui-cell__bd">
                     <select class="weui-select" name="Scale">
                         <option value="">请选择</option>
@@ -153,19 +153,13 @@ export default {
     return {
       pageTitle: '贸易信息采集',
       regexp: this.$store.getters.getRegexp,
-      pro: {
-        Product: '',
-        ProductName: '',
-        Standard: '',
-        ManufacturerName: '',
-        MedicineName: '',
+      trading: {
+        Market: '',
+        MerchantName: '',
+        Scale: '',
+        Medicine: '',
         BaseName: '',
-        Ratio: '',
-        MedicineStandard: '',
-        Supplier: '',
-        QualityRequire: '',
-        Sale:'',
-        ProductTendency: '',
+        MedicineType: '',
         Addition: ''
       },
       isManu: false,
