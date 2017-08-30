@@ -149,7 +149,7 @@ export default {
               var arr = JSON.parse(res.body.message);
               if(arr&&arr!=''){
               	_this.result[_this.searchkey] = JSON.parse(res.body.message);
-				console.log(_this.result[_this.searchkey]);
+				// console.log(_this.result[_this.searchkey]);
               	_this.nothing = false;
 				_this.$nextTick(() => {
 					_this._initScroll();
@@ -164,7 +164,9 @@ export default {
 		select:function(val,standard){
 			this.$store.dispatch(`${this.searchtemp}/set${this.searchkey}`,val);
 			// this.backTo();
-			if(this.searchtemp=='pro') this.$store.dispatch(`${this.searchtemp}/setstandard`,standard);
+			if(standard && standard!=''){
+				if(this.searchtemp=='pro' || this.searchtemp=='trading') this.$store.dispatch(`${this.searchtemp}/setstandard`,standard);
+			}
 			this.$emit('searchDone');
 			this.clean();
 		}

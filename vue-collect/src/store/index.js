@@ -10,6 +10,7 @@ import output from './output';
 import envi from './envi';
 import pieces from './pieces';
 import pro from './pro';
+import trading from './trading';
 
 export default new Vuex.Store({
   modules: {
@@ -19,7 +20,8 @@ export default new Vuex.Store({
     output,
     envi,
     pieces,
-    pro
+    pro,
+    trading
   }
 });
 

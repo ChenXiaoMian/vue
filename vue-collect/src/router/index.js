@@ -8,6 +8,7 @@ import formOutput from '@/components/formOutput'
 import formEnvi from '@/components/formEnvi'
 import formPieces from '@/components/formPieces'
 import formPro from '@/components/formPro'
+import formTrading from '@/components/formTrading'
 
 import chooseTemp from '@/components/chooseTemp'
 import searchItem from '@/components/searchItem'
@@ -58,6 +59,11 @@ export default new Router({
       path: '/formPro',
       name: 'formPro',
       component: formPro
+    },
+    {
+      path: '/formTrading',
+      name: 'formTrading',
+      component: formTrading
     },
     {
       path: '/chooseTemp',
