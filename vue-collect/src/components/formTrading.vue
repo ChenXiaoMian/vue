@@ -67,22 +67,9 @@
         </div>
         <baseInfo></baseInfo>
         <div class="km-page-button">
-            <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="reset">存为模板</a>
+            <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="test">存为模板</a>
             <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="submit">上传</a>
-        </div>
-        <!-- 保存弹出框 -->
-        <div class="js_dialog" style="display: none;">
-            <div class="weui-mask"></div>
-            <div class="weui-dialog">
-                <div class="weui-dialog__hd pt-15"><strong class="weui-dialog__title c-000000">提示</strong></div>
-                <div class="weui-dialog__bd"><input class="weui-input" name="tempName" type="text" placeholder="填写模板名称" emptyTips="请填写模板名称"></div>
-                <div class="weui-dialog__ft">
-                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default">取消</a>
-                    <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary c-3dbaff" id="save-for-temp">保存</a>
-                </div>
-            </div>
-        </div>
-        
+        </div>        
         <searchList v-show="isSearch" :searchtemp="searchtemp" :searchkey="searchkey" v-on:searchDone="searchDone"></searchList>
     </div>
 </template>
@@ -90,7 +77,7 @@
 <script>
 import weui from 'weui.js';
 import store from 'store';
-import { formatDate,uniqeByKeys } from '../common/js/util';
+import { formatDate,uniqeByKeys,trim } from '../common/js/util';
 import { mapGetters } from 'vuex';
 
 import comHead from './common/comHead';
@@ -181,19 +168,7 @@ export default {
         this.getStore();
     },
     submit () {
-        var _this = this;
-        if(!this.isMarket){
-            weui.topTips('请选择市场名称');
-            return false;
-        }
-        if(!this.isMedicine){
-            weui.topTips('请选择中药材名称');
-            return false;
-        }
-        if(!this.isBase){
-            weui.topTips('请选择产地名称');
-            return false;
-        }
+        this.validate();
         weui.form.validate('#form-trading', function(error){
             if(!error){                
                 if(_this.standardList.length<=1){
@@ -289,6 +264,39 @@ export default {
         }else{
             this.standardList.push(obj);
         }
+    },
+    test () {
+        var _this = this;
+        if(_this.validate()){       
+            weui.confirm('<input class="weui-input" id="tempName" name="tempName" type="text" placeholder="填写模板名称" emptyTips="请填写模板名称">',function(){
+                var tempName = document.getElementById('tempName').value;
+                if(tempName.length>0 && trim(tempName,1)!=''){
+
+                }else{
+                    weui.topTips('请填写模板名称');
+                    document.getElementById('tempName').focus();
+                    return false;
+                }
+            },function(){},{
+              title: '提示'
+            });
+        }
+    },
+    validate () {
+        // var _this = this;
+        // if(!this.isMarket){
+        //     weui.topTips('请选择市场名称');
+        //     return false;
+        // }
+        // if(!this.isMedicine){
+        //     weui.topTips('请选择中药材名称');
+        //     return false;
+        // }
+        // if(!this.isBase){
+        //     weui.topTips('请选择产地名称');
+        //     return false;
+        // }
+        return true;
     }
   },
   components: {

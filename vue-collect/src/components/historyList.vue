@@ -97,7 +97,7 @@
                 </router-link>
             </div>
             <div class="weui-cells" v-for="item in result.Trading">
-                <router-link :to="{path:'/historyDetail',query:{temp:'Trading',id:item.hid}}" class="c-222222">
+                <a @click="openDetail(item)" class="c-222222" :id="item.hid">
                 <div class="weui-cell fz-15">交易市场：{{item.Market}}</div>
                 <div class="weui-cell c-666666 align-items-left direction-column lh-24">
                     <p>商户名称：{{item.MerchantName}}</p>
@@ -105,12 +105,13 @@
                     <p>药材名称：{{item.Medicine}}</p>
                     <p>产地名称：{{item.BaseName}}</p>
                     <p>交易类型：{{item.MedicineType}}</p>
-                    <p>备　　注：{{item.Addition}}</p>
+                    <p v-show="item.Addition">备　　注：{{item.Addition}}</p>
                     <p>采集时间：{{item.Time}}</p>
                 </div>
-                </router-link>
+                </a>
             </div>
         </div>
+        <historyDetail v-show="isDetail" :dresult="dresult" :title="pageTitle" :temp="this.$route.query.temp" v-on:dclose="dclose"></historyDetail>
     </div>
 </template>
 
@@ -118,11 +119,12 @@
 import store from 'store';
 
 import comHead from './common/comHead';
+import historyDetail from './common/historyDetail';
 
 export default {
     data () {
         return {
-            pageTitle: '历史记录',
+            pageTitle: this.replactName(this.$route.query.temp)+'历史记录',
             result: {
                 Stock: [],
                 Origin: [],
@@ -132,7 +134,9 @@ export default {
                 Pro: [],
                 Trading: []
             },
-            isEmpty: false
+            isEmpty: false,
+            isDetail: false,
+            dresult: {}            
         }
     },
     created () {
@@ -150,8 +154,31 @@ export default {
             this.isEmpty = true;
         }
     },
+    methods: {
+        openDetail (item) {
+            this.dresult = item;
+            this.isDetail = true;
+        },
+        dclose () {
+            this.isDetail = false;
+            this.dresult = {};
+        },
+        replactName (temp) {
+            var title = {
+                'Stock': '市场采集',
+                'Origin': '产地采集',
+                'Output': '产出采集',
+                'Envi': '环境采集',
+                'Pieces': '饮片采集',
+                'Pro': '产品采集',
+                'Trading': '贸易采集'
+            };
+            return title[temp];
+        }
+    },
     components:{
-        comHead
+        comHead,
+        historyDetail
     }
 }
 </script>

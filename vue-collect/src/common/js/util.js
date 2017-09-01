@@ -1,8 +1,8 @@
+// 时间格式转换
 export function formatDate(date,fmt){
     if(/(y+)/.test(fmt)){
       fmt = fmt.replace(RegExp.$1,(date.getFullYear()+''.substr(4-RegExp.$1.length)));
     }
-
     let o = {
       'M+': date.getMonth()+1,
       'd+': date.getDate(),
@@ -66,4 +66,15 @@ export function uniqeByKeys(array,keys){
       }
   }
   return arr ;
+}
+
+//去除空格  type 1-所有空格  2-前后空格  3-前空格 4-后空格
+export function trim(str,type){
+  switch (type){
+      case 1:return str.replace(/\s+/g,"");
+      case 2:return str.replace(/(^\s*)|(\s*$)/g, "");
+      case 3:return str.replace(/(^\s*)/g, "");
+      case 4:return str.replace(/(\s*$)/g, "");
+      default:return str;
+  }
 }
