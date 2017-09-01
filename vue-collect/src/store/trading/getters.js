@@ -1,4 +1,7 @@
 export default {
+    getTemp(states){
+        return states.Temp;
+    },
     getMarket(states){
         return states.Market;
     },
@@ -9,6 +12,6 @@ export default {
         return states.BaseName;
     },
     getStandard(states){
-        return states.Standard;
+        return states.standardArr;
     }
 };

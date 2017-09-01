@@ -34,9 +34,9 @@
 				<div class="weui-cell__bd weui-cell_primary"><p>{{item.manufacturer_name}}</p></div><div class="weui-cell__ft"></div>
 			</a>
 		</div>
-		<div class="emptyContent" v-show="nothing">
+		<div class="emptyContent pos" v-show="nothing">
 			<i class="ic_none_reminder"></i>
-			<p class="emptyTip">对不起，没有与“{{keyword}}”相关的内容</p>
+			<p class="emptyTip lh-auto">对不起，没有与“{{keyword}}”相关的内容</p>
 		</div>
 	</div>
 </div>
@@ -163,6 +163,7 @@ export default {
 		},
 		select:function(val,standard){
 			this.$store.dispatch(`${this.searchtemp}/set${this.searchkey}`,val);
+			console.log(standard);
 			// this.backTo();
 			if(standard && standard!=''){
 				if(this.searchtemp=='pro' || this.searchtemp=='trading') this.$store.dispatch(`${this.searchtemp}/setstandard`,standard);

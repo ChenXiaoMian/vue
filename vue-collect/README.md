@@ -1,8 +1,14 @@
 # vue-collect
 
-> A Vue.js project
+> 用vue改写康美中药材数据采集系统
 
-## Build Setup
+技术栈：(vue-cli)[https://github.com/vuejs/vue-cli] + vuex + (store.js)[https://github.com/marcuswestin/store.js] + (weui.js)[https://github.com/weui/weui.js/] + (better-scroll)[https://github.com/ustbhuangyi/better-scroll]
+
+## 完成页面
+贸易采集页面，历史记录，历史详情，选择模板，搜索列表...
+
+## 存在问题
+相同逻辑页面存在细节问题，模板管理没有做（跟采集类似）。
 
 ``` bash
 # install dependencies

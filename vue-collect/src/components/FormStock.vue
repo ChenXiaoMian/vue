@@ -99,6 +99,7 @@
         </div>
         </form>
         <searchList v-show="isSearch" :searchtemp="searchtemp" :searchkey="searchkey" v-on:searchDone="searchDone"></searchList>
+        <tempList v-show="showTemp" :tempData="tempData" v-on:tclose="tclose"></tempList>
     </div>
 </template>
 
@@ -111,11 +112,13 @@ import { formatDate } from '../common/js/util';
 import comHead from './common/comHead';
 import baseInfo from './common/baseInfo';
 import searchList from './common/searchList';
+import tempList from './common/tempList';
 
 export default {
   data () {
     return {
       pageTitle: '市场存量信息采集',
+      localTemp: 'tempStock',
       regexp: this.$store.getters.getRegexp,
       stock: {
         Market: '',
@@ -132,10 +135,13 @@ export default {
       },
       isMarket: false,
       isMedicine: false,
+      isTemp: false,
+      showTemp: false,
       //搜索项
       isSearch: false,
       searchtemp: '',
-      searchkey: ''
+      searchkey: '',
+      tempData: []
     }
   },
   created () {
@@ -215,13 +221,24 @@ export default {
         this.$store.dispatch('stock/setmedicine','');
         this.init();
         document.formStock.reset();
+    },
+    choose () {
+        var _this = this,
+            json = JSON.parse(store.get(_this.localTemp));
+        _this.tempData = json.data;
+        _this.showTemp = true;
+    },
+    tclose() {
+        this.showTemp = false;
+        this.getStore();
     }
   },
   components: {
     comHead,
     baseInfo,
-    searchList
-  }
+    searchList,
+    tempList
+  }  
 }
 </script>
 

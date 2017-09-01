@@ -3,11 +3,11 @@
         <comHead :pageTitle="pageTitle"></comHead>
         <form id="form-trading" name="formTrading" autocomplete="off">
         <div class="weui-cells weui-cells_form">
-            <router-link class="weui-cell weui-cell_access js-tempChoose" :to="{path:'/chooseTemp',query:{num:1}}">
+            <a class="weui-cell weui-cell_access js-tempChoose" @click="choose">
                 <div class="weui-cell__hd km-line"><label class="weui-label ">选择模板</label></div>
-                <div class="weui-cell__bd"><p class="c-3dbaff getChooseTemp">默认模板</p></div>
+                <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isTemp,'c-c7c7c7':!isTemp}">{{trading.Temp}}</p></div>
                 <div class="weui-cell__ft"></div>
-            </router-link>
+            </a>
             <a class="weui-cell weui-cell_access js-itemSearch" @click="search('trading','market')">
                 <div class="weui-cell__hd km-line"><label class="weui-label adLet">交易市场</label></div>
                 <div class="weui-cell__bd"><p v-bind:class="{'c-3dbaff':isMarket,'c-c7c7c7':!isMarket}">{{trading.Market}}</p></div>
@@ -67,10 +67,11 @@
         </div>
         <baseInfo></baseInfo>
         <div class="km-page-button">
-            <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="test">存为模板</a>
+            <a href="javascript:;" class="weui-btn weui-btn_plain-default km-btn_default" @click="save">存为模板</a>
             <a href="javascript:;" class="weui-btn weui-btn_plain-primary km-btn_primary" @click="submit">上传</a>
         </div>        
         <searchList v-show="isSearch" :searchtemp="searchtemp" :searchkey="searchkey" v-on:searchDone="searchDone"></searchList>
+        <tempList v-show="showTemp" :tempData="tempData" :temp="'trading'" :tempTitle="trading.Temp" v-on:tclose="tclose"></tempList>
     </div>
 </template>
 
@@ -78,19 +79,23 @@
 import weui from 'weui.js';
 import store from 'store';
 import { formatDate,uniqeByKeys,trim } from '../common/js/util';
+import { localLimit } from '../common/js/localstorage';
 import { mapGetters } from 'vuex';
 
 import comHead from './common/comHead';
 import baseInfo from './common/baseInfo';
 import searchList from './common/searchList';
 import standardBlock from './common/standardBlock';
+import tempList from './common/tempList';
 
 export default {
   data () {
     return {
       pageTitle: '贸易信息采集',
+      localTemp: 'tempTrading',
       regexp: this.$store.getters.getRegexp,
       trading: {
+        Temp:'',
         Market: '',
         MerchantName: '',
         Scale: '',
@@ -103,6 +108,8 @@ export default {
       isMedicine: false,
       isBase: false,
       isSearch: false,
+      isTemp: false,
+      showTemp: false,
       searchtemp: '',
       searchkey: '',
       standardArr: [],
@@ -116,7 +123,8 @@ export default {
             MarketStatus: '',
             isAbled: true
         }
-      ]
+      ],
+      tempData: []
     }
   },
   created (){
@@ -125,6 +133,7 @@ export default {
   computed : {
     ...mapGetters([
         'getUrl',
+        'trading/getTemp',
         'trading/getMarket',
         'trading/getMedicine',
         'trading/getBaseName',
@@ -136,26 +145,31 @@ export default {
   },
   methods: {
     init () {
+        this.trading.Temp = '选择模板';
     	this.trading.Market = '关键字/市场名称';
     	this.trading.Medicine = '关键字/中药材名称';
         this.trading.BaseName = '关键字/产地名称';
         this.isMarket = false;
         this.isMedicine = false;
         this.isBase = false;
+        this.isTemp = false;
         this.standardArr = [];
     },
     getStore () {
         var market = this['trading/getMarket'],
             medicine = this['trading/getMedicine'],
-            baseName = this['trading/getBaseName'];
+            baseName = this['trading/getBaseName'],
+            temp = this['trading/getTemp'];
         this.trading.Market = market || '关键字/市场名称';
         this.trading.Medicine = medicine || '关键字/中药材名称';
         this.trading.BaseName = baseName || '关键字/产地名称';
+        this.trading.Temp = temp || '选择模板';
         if(market!='') this.isMarket = true;
         if(medicine!='') this.isMedicine = true;
         if(baseName!='') this.isBase = true;
-        var standard = this['trading/getStandard'] ? this['trading/getStandard'] : '';
-        if(standard!='')  this.standardArr = standard.split(',');
+        if(temp!='') this.isTemp = true;
+        var standard = this['trading/getStandard'] ? this['trading/getStandard'] : [];
+        if(standard.length!=0)  this.standardArr = standard;
     },
     search (t,k) {
         this.isSearch = true;
@@ -216,7 +230,7 @@ export default {
                             var histTrading = JSON.parse(store.get('histTrading'));
                             histTrading.data.unshift(item);
                             store.remove('histTrading');
-                            store.set('histTrading',JSON.stringify(histPro));
+                            store.set('histTrading',JSON.stringify(histTrading));
                         }else{
                             // 新建
                             var historyData = {data : []};
@@ -240,10 +254,7 @@ export default {
         },this.regexp);
     },
     reset () {
-        this.$store.dispatch('trading/setmarket','');
-        this.$store.dispatch('trading/setmedicine','');
-        this.$store.dispatch('trading/setbase','');
-        this.$store.dispatch('trading/setstandard','');
+        this.$store.dispatch('trading/reset');
         document.formTrading.reset();
         this.init();
         this.$router.go({ path: 'formTrading' });
@@ -265,13 +276,42 @@ export default {
             this.standardList.push(obj);
         }
     },
-    test () {
+    save () {
+        if(!localLimit(this.localTemp,function(){
+            weui.alert('最多可以创建10个模板');
+        })){
+            return false;
+        }
         var _this = this;
         if(_this.validate()){       
-            weui.confirm('<input class="weui-input" id="tempName" name="tempName" type="text" placeholder="填写模板名称" emptyTips="请填写模板名称">',function(){
+            weui.confirm('<input class="weui-input" id="tempName" name="tempName" v-model="trading.tempTitle" type="text" placeholder="填写模板名称" emptyTips="请填写模板名称">',function(){
                 var tempName = document.getElementById('tempName').value;
                 if(tempName.length>0 && trim(tempName,1)!=''){
+                    var jsonData = {};
+                        jsonData.UserName = store.get('loginName');
+                        Object.assign(jsonData,_this.trading); //es6
+                        jsonData.Address = _this.$store.getters.getLocation;
+                        jsonData.Time = formatDate(new Date(),'yyyy-MM-dd hh:mm');
+                        jsonData.hid = new Date().getTime();
+                        jsonData.standardArr = _this.standardArr;
+                        jsonData.IsDefault = 0;
+                        jsonData.tempTitle = tempName;
 
+                    var loading = weui.loading('保存中...');
+                    if(store.get(_this.localTemp) && store.get(_this.localTemp)!=''){
+                        // 更新
+                        var objUpdate = JSON.parse(store.get(_this.localTemp));
+                        objUpdate.data.unshift(jsonData);
+                        store.remove(_this.localTemp);
+                        store.set(_this.localTemp,JSON.stringify(objUpdate));
+                    }else{
+                        // 新建
+                        var objAdd = {data : []};
+                        objAdd.data.unshift(jsonData);
+                        store.set(_this.localTemp,JSON.stringify(objAdd));
+                    }
+                    loading.hide();
+                    weui.toast('模板保存成功', 500);
                 }else{
                     weui.topTips('请填写模板名称');
                     document.getElementById('tempName').focus();
@@ -283,27 +323,41 @@ export default {
         }
     },
     validate () {
-        // var _this = this;
-        // if(!this.isMarket){
-        //     weui.topTips('请选择市场名称');
-        //     return false;
-        // }
-        // if(!this.isMedicine){
-        //     weui.topTips('请选择中药材名称');
-        //     return false;
-        // }
-        // if(!this.isBase){
-        //     weui.topTips('请选择产地名称');
-        //     return false;
-        // }
+        var _this = this;
+        if(!this.isMarket){
+            weui.topTips('请选择市场名称');
+            return false;
+        }
+        if(!this.isMedicine){
+            weui.topTips('请选择中药材名称');
+            return false;
+        }
+        if(!this.isBase){
+            weui.topTips('请选择产地名称');
+            return false;
+        }
         return true;
+    },
+    choose () {
+        var _this = this,
+            json = JSON.parse(store.get(_this.localTemp));
+        _this.tempData = json.data;
+        _this.showTemp = true;
+    },
+    tclose() {
+        this.showTemp = false;
+        this.getStore();
     }
   },
   components: {
 	comHead,
 	baseInfo,
     searchList,
-    standardBlock
+    standardBlock,
+    tempList
+  },
+  destroyed () {
+      this.$store.dispatch('trading/reset');
   }
 }
 </script>
