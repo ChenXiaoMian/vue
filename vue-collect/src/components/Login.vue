@@ -34,6 +34,7 @@ import weui from 'weui.js';
 import md5 from 'js-md5';
 import store from 'store';
 import { getPosition } from '../common/js/util';
+import { kmUrl } from '../common/js/config'
 
 export default {
   data () {

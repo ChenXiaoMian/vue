@@ -1,0 +1,1 @@
+export const kmUrl = 'http://km126.km1818.com:8181/KMInfoCollect/services'
